@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitor Financiero IA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0eff5;
+    --muted: #7a798a;
+    --accent: #7c6af7;
+    --accent2: #a89cf8;
+    --green: #2dd68a;
+    --green-bg: rgba(45,214,138,0.08);
+    --red: #f05c5c;
+    --red-bg: rgba(240,92,92,0.08);
+    --amber: #f0a840;
+    --amber-bg: rgba(240,168,64,0.08);
+    --blue: #5ca8f0;
+    --blue-bg: rgba(92,168,240,0.08);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Grid de fondo */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(124,106,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .logo h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .logo span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(124,106,247,0.1);
+    border: 1px solid rgba(124,106,247,0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .last-update {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124,106,247,0.1);
+    border: 1px solid rgba(124,106,247,0.25);
+    color: var(--accent2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-refresh:hover { background: rgba(124,106,247,0.2); border-color: rgba(124,106,247,0.4); }
+  .btn-refresh svg { width: 14px; height: 14px; }
+
+  /* Hero */
+  .hero {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .hero h2 em {
+    font-style: normal;
+    color: var(--accent2);
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 520px;
+  }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--border2); }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+  .stat-value.accent { color: var(--accent2); }
+  .stat-value.default { color: var(--text); }
+
+  /* Filtros */
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 20px 0;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filters-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover { color: var(--text); border-color: var(--border2); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* Cards */
+  .cards-list { padding-bottom: 60px; }
+
+  .news-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .news-card:hover {
+    border-color: var(--border2);
+    background: var(--bg3);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .card-fecha {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-top: 3px;
+  }
+
+  .card-resumen {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .card-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+  }
+
+  .badge-alcista { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,214,138,0.2); }
+  .badge-bajista { background: var(--red-bg); color: var(--red); border: 1px solid rgba(240,92,92,0.2); }
+  .badge-neutro { background: rgba(122,121,138,0.1); color: var(--muted); border: 1px solid rgba(122,121,138,0.2); }
+  .badge-mixto { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(240,168,64,0.2); }
+  .badge-sector { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(92,168,240,0.2); }
+  .badge-alta { background: var(--red-bg); color: var(--red); border: 1px solid rgba(240,92,92,0.15); }
+  .badge-media { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(240,168,64,0.15); }
+  .badge-baja { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,214,138,0.15); }
+
+  .card-tickers {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .ticker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: rgba(124,106,247,0.08);
+    border: 1px solid rgba(124,106,247,0.15);
+    color: var(--accent2);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .card-senal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .card-senal strong { color: var(--text); font-weight: 500; }
+
+  .senal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Loading / empty */
+  .status-msg {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  .spinner {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    text-align: center;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  footer span { color: var(--accent2); }
+
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero h2 { font-size: 28px; }
+    .header-right .last-update { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <h1>FinanceIA Monitor</h1>
+        <span>LIVE</span>
+      </div>
+      <div class="header-right">
+        <span class="last-update" id="last-update">—</span>
+        <button class="btn-refresh" onclick="cargar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Actualizar
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="hero">
+      <p class="hero-label">Powered by Claude AI · Yahoo Finance RSS</p>
+      <h2>Noticias bursátiles<br><em>analizadas con IA</em></h2>
+      <p>Monitoreo automático cada 6 horas. Resúmenes, señales de inversión y análisis de impacto generados por Claude.</p>
+    </div>
+
+    <div class="stats-grid" id="stats">
+      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value default">—</div></div>
+      <div class="stat-card"><div class="stat-label">Alcistas</div><div class="stat-value green">—</div></div>
+      <div class="stat-card"><div class="stat-label">Bajistas</div><div class="stat-value red">—</div></div>
+      <div class="stat-card"><div class="stat-label">Alta relevancia</div><div class="stat-value accent">—</div></div>
+    </div>
+
+    <div class="filters">
+      <span class="filters-label">FILTRAR:</span>
+      <button class="filter-btn active" onclick="filtrar('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="filtrar('Alcista', this)">Alcista</button>
+      <button class="filter-btn" onclick="filtrar('Bajista', this)">Bajista</button>
+      <button class="filter-btn" onclick="filtrar('Neutro', this)">Neutro</button>
+      <button class="filter-btn" onclick="filtrar('Mixto', this)">Mixto</button>
+      <button class="filter-btn" onclick="filtrar('Alta', this)">Alta relevancia</button>
+    </div>
+
+    <div class="cards-list">
+      <div class="status-msg" id="status">
+        <div class="spinner"></div>
+        Cargando noticias...
+      </div>
+      <div id="cards"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>FinanceIA Monitor · Proyecto Coderhouse · Automatizaciones con <span>IA</span> · n8n + Claude API</p>
+  </div>
+</footer>
+
+<script>
+const SHEET_ID = '1Mpn7NhJaPQWvfvtah6zWQ9h4jfSG4rOmYdeQoZt_yA4';
+let allData = [];
+let filtroActivo = 'todos';
+
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.trim().split('\n');
+  for (const line of lines) {
+    const row = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === '"') { inQ = !inQ; }
+      else if (line[i] === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+      else { cur += line[i]; }
+    }
+    row.push(cur.trim());
+    rows.push(row);
+  }
+  return rows;
+}
+
+function badgeImpacto(v) {
+  if (!v) return '';
+  const vl = v.toLowerCase();
+  const cl = vl.includes('alc') ? 'alcista' : vl.includes('baj') ? 'bajista' : vl.includes('mix') ? 'mixto' : 'neutro';
+  return `<span class="badge badge-${cl}">${v}</span>`;
+}
+
+function badgeRelevancia(v) {
+  if (!v) return '';
+  const vl = v.toLowerCase();
+  const cl = vl.includes('alt') ? 'alta' : vl.includes('baj') ? 'baja' : 'media';
+  return `<span class="badge badge-${cl}">Rel. ${v}</span>`;
+}
+
+function badgeSector(v) {
+  return v ? `<span class="badge badge-sector">${v}</span>` : '';
+}
+
+function renderTickers(v) {
+  if (!v) return '';
+  return v.split(',').map(t => t.trim().replace(/['"]/g, '')).filter(Boolean)
+    .map(t => `<span class="ticker">${t}</span>`).join('');
+}
+
+function senalColor(v) {
+  if (!v) return '#7a798a';
+  const vl = v.toLowerCase();
+  if (vl.includes('compra')) return '#2dd68a';
+  if (vl.includes('venta')) return '#f05c5c';
+  if (vl.includes('mantener')) return '#5ca8f0';
+  return '#7a798a';
+}
+
+function formatFecha(v) {
+  if (!v) return '';
+  try {
+    return new Date(v).toLocaleString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  } catch(e) { return v; }
+}
+
+function renderStats(data) {
+  const alcistas = data.filter(r => (r[3]||'').includes('Alcista')).length;
+  const bajistas = data.filter(r => (r[3]||'').includes('Bajista')).length;
+  const altas = data.filter(r => (r[7]||'').includes('Alta')).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total noticias</div><div class="stat-value default">${data.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Alcistas</div><div class="stat-value green">${alcistas}</div></div>
+    <div class="stat-card"><div class="stat-label">Bajistas</div><div class="stat-value red">${bajistas}</div></div>
+    <div class="stat-card"><div class="stat-label">Alta relevancia</div><div class="stat-value accent">${altas}</div></div>
+  `;
+}
+
+function renderCards(data) {
+  const container = document.getElementById('cards');
+  if (!data.length) {
+    container.innerHTML = '<div class="status-msg">No hay noticias con ese filtro.</div>';
+    return;
+  }
+  container.innerHTML = data.map(r => `
+    <div class="news-card">
+      <div class="card-top">
+        <div class="card-title">${r[1] || 'Sin título'}</div>
+        <div class="card-fecha">${formatFecha(r[0])}</div>
+      </div>
+      <div class="card-resumen">${r[2] || ''}</div>
+      <div class="card-badges">
+        ${badgeImpacto(r[3])}
+        ${badgeSector(r[5])}
+        ${badgeRelevancia(r[7])}
+        ${r[6] ? `<span style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">${r[6]}</span>` : ''}
+      </div>
+      ${r[4] ? `<div class="card-tickers">${renderTickers(r[4])}</div>` : ''}
+      ${r[8] ? `<div class="card-senal"><div class="senal-dot" style="background:${senalColor(r[8])}"></div><span>Señal: <strong>${r[8]}</strong></span></div>` : ''}
+    </div>
+  `).join('');
+}
+
+function filtrar(tipo, btn) {
+  filtroActivo = tipo;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  let filtered = allData;
+  if (tipo === 'Alcista') filtered = allData.filter(r => (r[3]||'').includes('Alcista'));
+  else if (tipo === 'Bajista') filtered = allData.filter(r => (r[3]||'').includes('Bajista'));
+  else if (tipo === 'Neutro') filtered = allData.filter(r => (r[3]||'').includes('Neutro'));
+  else if (tipo === 'Mixto') filtered = allData.filter(r => (r[3]||'').includes('Mixto'));
+  else if (tipo === 'Alta') filtered = allData.filter(r => (r[7]||'').includes('Alta'));
+  renderCards(filtered);
+}
+
+async function cargar() {
+  document.getElementById('status').style.display = 'block';
+  document.getElementById('status').innerHTML = '<div class="spinner"></div>Cargando noticias...';
+  document.getElementById('cards').innerHTML = '';
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Hoja1`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    allData = rows.slice(1).filter(r => r[1] && r[1].length > 2);
+    document.getElementById('status').style.display = 'none';
+    document.getElementById('last-update').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'});
+    renderStats(allData);
+    filtrar(filtroActivo, null);
+  } catch(e) {
+    document.getElementById('status').innerHTML = `<div style="color:#f05c5c;">Error al cargar datos.<br><small>${e.message}</small></div>`;
+  }
+}
+
+cargar();
+</script>
+</body>
+</html>
