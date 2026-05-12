@@ -434,7 +434,22 @@
     flex-shrink: 0;
   }
 
-  .card-preview { font-size: 13.5px; color: #b0b0b0; line-height: 1.7; margin-bottom: 12px; font-weight: 400; }
+  .card-preview {
+    font-size: 13.5px;
+    color: #b0b0b0;
+    line-height: 1.7;
+    margin-bottom: 12px;
+    font-weight: 400;
+    max-height: 300px;
+    overflow: hidden;
+    transition: opacity 0.2s ease, max-height 0.3s ease, margin-bottom 0.3s ease;
+  }
+
+  .news-card.expanded .card-preview {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+  }
 
   .card-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
@@ -450,25 +465,34 @@
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.3px;
-    transition: all 0.2s;
+    transition: color 0.2s, border-top-color 0.2s;
     user-select: none;
   }
 
-  .card-chevron svg { width: 13px; height: 13px; transition: transform 0.25s; flex-shrink: 0; }
+  .card-chevron svg { width: 13px; height: 13px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
 
   .news-card:hover .card-chevron { color: var(--accent2); }
   .news-card.expanded .card-chevron { color: var(--accent2); border-top-color: rgba(124,106,247,0.2); }
   .news-card.expanded .card-chevron svg { transform: rotate(180deg); }
 
-  /* Card body (expanded) */
+  /* Card body — animado con grid trick */
+  .card-expand-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.38s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .news-card.expanded .card-expand-wrap {
+    grid-template-rows: 1fr;
+  }
+
   .card-body {
-    display: none;
+    min-height: 0;
+    overflow: hidden;
     padding: 20px 20px 20px 23px;
     border-top: 1px solid var(--border);
     background: rgba(0,0,0,0.35);
   }
-
-  .news-card.expanded .card-body { display: block; animation: fadeIn 0.2s ease; }
 
   .cb-label {
     font-family: 'DM Mono', monospace;
@@ -897,7 +921,11 @@ function textoBusqueda(r) {
 }
 
 // ── Card toggle ──
-function toggleCard(el) { el.classList.toggle('expanded'); }
+function toggleCard(el) {
+  el.classList.toggle('expanded');
+  const label = el.querySelector('.chevron-label');
+  if (label) label.textContent = el.classList.contains('expanded') ? 'Cerrar análisis' : 'Ver análisis completo';
+}
 
 // ── Toast ──
 let toastTimer;
@@ -975,10 +1003,10 @@ function renderCards(data) {
           </div>
         </div>
         <div class="card-chevron">
-          <span>Ver análisis completo</span>
+          <span class="chevron-label">Ver análisis completo</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="card-body">
+        <div class="card-expand-wrap"><div class="card-body">
           <div class="cb-label">Resumen ejecutivo</div>
           <div class="cb-text">${r[2]||'—'}</div>
           <div class="card-detail-grid">
@@ -993,7 +1021,7 @@ function renderCards(data) {
               <div class="senal-dot" style="background:${senalColor(r[8])}"></div>
               <span>Señal: <strong>${r[8]}</strong></span>
             </div>` : ''}
-        </div>
+        </div></div>
       </div>`;
   }).join('');
 }
