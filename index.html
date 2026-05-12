@@ -6,29 +6,29 @@
 <title>FinanceIA Monitor · Noticias Bursátiles con IA</title>
 <meta name="description" content="Monitor automático de noticias bursátiles analizadas con IA. Señales de inversión, impacto y relevancia generados por Claude.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
   :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --bg3: #1a1a24;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.13);
-    --text: #f0eff5;
-    --muted: #7a798a;
+    --bg: #000000;
+    --bg2: #0e0e0e;
+    --bg3: #161616;
+    --border: rgba(255,255,255,0.09);
+    --border2: rgba(255,255,255,0.17);
+    --text: #ffffff;
+    --muted: #909090;
     --accent: #7c6af7;
-    --accent2: #a89cf8;
-    --green: #2dd68a;
-    --green-bg: rgba(45,214,138,0.08);
-    --red: #f05c5c;
-    --red-bg: rgba(240,92,92,0.08);
-    --amber: #f0a840;
-    --amber-bg: rgba(240,168,64,0.08);
-    --blue: #5ca8f0;
-    --blue-bg: rgba(92,168,240,0.08);
+    --accent2: #b3a8ff;
+    --green: #3ddc90;
+    --green-bg: rgba(61,220,144,0.09);
+    --red: #ff6060;
+    --red-bg: rgba(255,96,96,0.09);
+    --amber: #f5ad45;
+    --amber-bg: rgba(245,173,69,0.09);
+    --blue: #60b0ff;
+    --blue-bg: rgba(96,176,255,0.09);
   }
 
   ::-webkit-scrollbar { width: 5px; }
@@ -43,6 +43,9 @@
     font-size: 15px;
     line-height: 1.6;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body::before {
@@ -50,8 +53,8 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(124,106,247,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124,106,247,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(124,106,247,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,0.05) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
@@ -71,7 +74,7 @@
     padding: 15px 0;
     position: sticky;
     top: 0;
-    background: rgba(10,10,15,0.92);
+    background: rgba(0,0,0,0.92);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     z-index: 100;
@@ -235,10 +238,11 @@
   }
 
   .hero p {
-    color: var(--muted);
+    color: #aaaaaa;
     font-size: 15px;
     max-width: 520px;
     line-height: 1.75;
+    font-weight: 400;
   }
 
   /* ── Stats ── */
@@ -286,9 +290,9 @@
   .stat-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #888888;
     margin-bottom: 10px;
   }
 
@@ -519,11 +523,12 @@
 
   .card-title {
     font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 15.5px;
+    font-weight: 700;
     color: var(--text);
-    line-height: 1.4;
+    line-height: 1.38;
     flex: 1;
+    letter-spacing: -0.1px;
   }
 
   .card-fecha {
@@ -539,10 +544,11 @@
   }
 
   .card-resumen {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
+    font-size: 13.5px;
+    color: #b0b0b0;
+    line-height: 1.72;
     margin-bottom: 14px;
+    font-weight: 400;
   }
 
   .card-resumen.collapsed {
@@ -582,14 +588,14 @@
     font-weight: 500;
   }
 
-  .badge-alcista { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,214,138,0.2); }
-  .badge-bajista { background: var(--red-bg); color: var(--red); border: 1px solid rgba(240,92,92,0.2); }
-  .badge-neutro { background: rgba(122,121,138,0.1); color: var(--muted); border: 1px solid rgba(122,121,138,0.2); }
-  .badge-mixto { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(240,168,64,0.2); }
-  .badge-sector { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(92,168,240,0.2); }
-  .badge-alta { background: var(--red-bg); color: var(--red); border: 1px solid rgba(240,92,92,0.15); }
-  .badge-media { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(240,168,64,0.15); }
-  .badge-baja { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,214,138,0.15); }
+  .badge-alcista { background: var(--green-bg); color: var(--green); border: 1px solid rgba(61,220,144,0.25); }
+  .badge-bajista { background: var(--red-bg); color: var(--red); border: 1px solid rgba(255,96,96,0.25); }
+  .badge-neutro { background: rgba(144,144,144,0.08); color: var(--muted); border: 1px solid rgba(144,144,144,0.2); }
+  .badge-mixto { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,173,69,0.25); }
+  .badge-sector { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(96,176,255,0.25); }
+  .badge-alta { background: var(--red-bg); color: var(--red); border: 1px solid rgba(255,96,96,0.2); }
+  .badge-media { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,173,69,0.2); }
+  .badge-baja { background: var(--green-bg); color: var(--green); border: 1px solid rgba(61,220,144,0.2); }
 
   .badge-conf {
     font-family: 'DM Mono', monospace;
@@ -602,9 +608,9 @@
     color: var(--muted);
   }
 
-  .badge-conf.conf-high { background: rgba(45,214,138,0.07); color: var(--green); border-color: rgba(45,214,138,0.18); }
-  .badge-conf.conf-mid { background: rgba(240,168,64,0.07); color: var(--amber); border-color: rgba(240,168,64,0.18); }
-  .badge-conf.conf-low { background: rgba(240,92,92,0.07); color: var(--red); border-color: rgba(240,92,92,0.18); }
+  .badge-conf.conf-high { background: rgba(61,220,144,0.08); color: var(--green); border-color: rgba(61,220,144,0.22); }
+  .badge-conf.conf-mid { background: rgba(245,173,69,0.08); color: var(--amber); border-color: rgba(245,173,69,0.22); }
+  .badge-conf.conf-low { background: rgba(255,96,96,0.08); color: var(--red); border-color: rgba(255,96,96,0.22); }
 
   .card-tickers {
     display: flex;
