@@ -15,6 +15,7 @@
     --bg: #000000;
     --bg2: #0e0e0e;
     --bg3: #161616;
+    --bg4: #1e1e1e;
     --border: rgba(255,255,255,0.09);
     --border2: rgba(255,255,255,0.17);
     --text: #ffffff;
@@ -60,11 +61,7 @@
     z-index: 0;
   }
 
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
   .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
@@ -80,43 +77,31 @@
     z-index: 100;
   }
 
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
+  .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .logo { display: flex; align-items: center; gap: 10px; }
 
   .logo-dot {
     width: 8px; height: 8px;
     background: var(--green);
     border-radius: 50%;
-    animation: pulse-live 2s infinite;
-    box-shadow: 0 0 8px rgba(45,214,138,0.5);
     flex-shrink: 0;
+    animation: pulse-live 2s infinite;
+    box-shadow: 0 0 8px rgba(61,220,144,0.5);
   }
 
   @keyframes pulse-live {
-    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(45,214,138,0.5); }
-    50% { opacity: 0.55; transform: scale(0.8); box-shadow: 0 0 3px rgba(45,214,138,0.2); }
+    0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 8px rgba(61,220,144,0.5); }
+    50% { opacity:0.5; transform:scale(0.8); box-shadow:0 0 3px rgba(61,220,144,0.2); }
   }
 
-  .logo h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    color: var(--text);
-  }
+  .logo h1 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
 
   .logo-badge {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
     color: var(--green);
-    background: rgba(45,214,138,0.1);
-    border: 1px solid rgba(45,214,138,0.25);
+    background: rgba(61,220,144,0.1);
+    border: 1px solid rgba(61,220,144,0.25);
     padding: 2px 8px;
     border-radius: 4px;
     letter-spacing: 0.5px;
@@ -158,15 +143,9 @@
     transition: all 0.2s;
   }
 
-  .btn-refresh:hover {
-    background: rgba(124,106,247,0.2);
-    border-color: rgba(124,106,247,0.5);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(124,106,247,0.2);
-  }
-
+  .btn-refresh:hover { background: rgba(124,106,247,0.2); border-color: rgba(124,106,247,0.5); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124,106,247,0.2); }
   .btn-refresh:active { transform: translateY(0); }
-  .btn-refresh svg { width: 14px; height: 14px; transition: transform 0.3s; }
+  .btn-refresh svg { width: 14px; height: 14px; }
   .btn-refresh.loading svg { animation: spin 0.8s linear infinite; }
   .btn-refresh:disabled { opacity: 0.6; cursor: default; transform: none; }
 
@@ -181,10 +160,8 @@
   .hero::before {
     content: '';
     position: absolute;
-    top: -80px;
-    left: -120px;
-    width: 600px;
-    height: 500px;
+    top: -80px; left: -120px;
+    width: 600px; height: 500px;
     background: radial-gradient(ellipse at center, rgba(124,106,247,0.1) 0%, transparent 65%);
     pointer-events: none;
   }
@@ -214,10 +191,7 @@
     animation: pulse-accent 2s infinite;
   }
 
-  @keyframes pulse-accent {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
+  @keyframes pulse-accent { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
   .hero h2 {
     font-family: 'Syne', sans-serif;
@@ -225,7 +199,6 @@
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -1.5px;
-    color: var(--text);
     margin-bottom: 16px;
   }
 
@@ -237,18 +210,12 @@
     background-clip: text;
   }
 
-  .hero p {
-    color: #aaaaaa;
-    font-size: 15px;
-    max-width: 520px;
-    line-height: 1.75;
-    font-weight: 400;
-  }
+  .hero p { color: #aaaaaa; font-size: 15px; max-width: 520px; line-height: 1.75; }
 
   /* ── Stats ── */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4,1fr);
     gap: 12px;
     padding: 28px 0;
     border-bottom: 1px solid var(--border);
@@ -279,44 +246,20 @@
   .stat-card.s-red::after { background: var(--red); }
   .stat-card.s-accent::after { background: var(--accent2); }
 
-  .stat-card:hover {
-    border-color: var(--border2);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  }
-
+  .stat-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
   .stat-card:hover::after { opacity: 1; }
 
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: #888888;
-    margin-bottom: 10px;
-  }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; color: #888888; margin-bottom: 10px; }
 
-  .stat-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 5px;
-  }
-
-  .stat-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    min-height: 14px;
-  }
+  .stat-value { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
+  .stat-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); min-height: 14px; }
 
   .stat-value.green { color: var(--green); }
   .stat-value.red { color: var(--red); }
   .stat-value.accent { color: var(--accent2); }
   .stat-value.default { color: var(--text); }
 
-  /* ── Controls (search + sort) ── */
+  /* ── Controls ── */
   .controls {
     padding: 20px 0 0;
     display: flex;
@@ -325,16 +268,11 @@
     flex-wrap: wrap;
   }
 
-  .search-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 180px;
-  }
+  .search-wrap { position: relative; flex: 1; min-width: 180px; }
 
   .search-wrap svg {
     position: absolute;
-    left: 11px;
-    top: 50%;
+    left: 11px; top: 50%;
     transform: translateY(-50%);
     width: 14px; height: 14px;
     color: var(--muted);
@@ -354,22 +292,13 @@
   }
 
   .search-input::placeholder { color: var(--muted); }
+  .search-input:focus { border-color: rgba(124,106,247,0.45); outline: none; background: var(--bg3); box-shadow: 0 0 0 3px rgba(124,106,247,0.08); }
 
-  .search-input:focus {
-    border-color: rgba(124,106,247,0.45);
-    outline: none;
-    background: var(--bg3);
-    box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
-  }
-
-  .sort-wrap {
-    position: relative;
-  }
+  .sort-wrap { position: relative; }
 
   .sort-wrap svg {
     position: absolute;
-    right: 10px;
-    top: 50%;
+    right: 10px; top: 50%;
     transform: translateY(-50%);
     width: 12px; height: 12px;
     color: var(--muted);
@@ -390,11 +319,7 @@
     -webkit-appearance: none;
   }
 
-  .sort-select:focus {
-    border-color: rgba(124,106,247,0.45);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
-  }
+  .sort-select:focus { border-color: rgba(124,106,247,0.45); outline: none; box-shadow: 0 0 0 3px rgba(124,106,247,0.08); }
 
   /* ── Filtros ── */
   .filters {
@@ -406,13 +331,7 @@
     border-bottom: 1px solid var(--border);
   }
 
-  .filters-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 1px;
-    margin-right: 2px;
-  }
+  .filters-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-right: 2px; }
 
   .filter-btn {
     background: transparent;
@@ -440,36 +359,19 @@
     text-align: center;
   }
 
-  .filter-btn:hover {
-    color: var(--text);
-    border-color: rgba(255,255,255,0.22);
-    background: rgba(255,255,255,0.04);
-  }
-
-  .filter-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-    box-shadow: 0 0 16px rgba(124,106,247,0.3);
-  }
-
+  .filter-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.04); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 0 16px rgba(124,106,247,0.3); }
   .filter-btn.active .filter-count { background: rgba(255,255,255,0.2); }
 
   /* ── Results header ── */
   .results-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 14px 0 10px;
     min-height: 42px;
   }
 
-  .results-count {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
-
+  .results-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
   .results-count strong { color: var(--text); font-weight: 500; }
 
   /* ── Cards ── */
@@ -479,12 +381,12 @@
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 20px 20px 23px;
     margin-bottom: 10px;
     transition: all 0.2s;
     animation: fadeIn 0.25s ease both;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
   }
 
   .news-card::before {
@@ -493,7 +395,6 @@
     left: 0; top: 0; bottom: 0;
     width: 3px;
     border-radius: 12px 0 0 12px;
-    transition: opacity 0.2s;
   }
 
   .news-card.impact-alcista::before { background: var(--green); }
@@ -501,25 +402,15 @@
   .news-card.impact-mixto::before { background: var(--amber); }
   .news-card.impact-neutro::before { background: var(--muted); opacity: 0.3; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
-  .news-card:hover {
-    border-color: var(--border2);
-    background: var(--bg3);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  }
+  .news-card:hover { border-color: var(--border2); background: var(--bg3); }
+  .news-card.expanded { border-color: rgba(124,106,247,0.35); box-shadow: 0 8px 32px rgba(124,106,247,0.08); }
 
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 10px;
-  }
+  /* Card header (always visible) */
+  .card-header { padding: 20px 20px 18px 23px; }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
 
   .card-title {
     font-family: 'Syne', sans-serif;
@@ -543,42 +434,91 @@
     flex-shrink: 0;
   }
 
-  .card-resumen {
-    font-size: 13.5px;
-    color: #b0b0b0;
-    line-height: 1.72;
-    margin-bottom: 14px;
-    font-weight: 400;
-  }
+  .card-preview { font-size: 13.5px; color: #b0b0b0; line-height: 1.7; margin-bottom: 12px; font-weight: 400; }
 
-  .card-resumen.collapsed {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+  .card-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
-  .btn-expand {
-    background: none;
-    border: none;
-    color: var(--accent2);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 0 0 10px;
-    display: block;
-  }
-
-  .btn-expand:hover { color: var(--accent); }
-
-  .card-badges {
+  /* Chevron toggle */
+  .card-chevron {
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    user-select: none;
   }
 
+  .card-chevron svg { width: 13px; height: 13px; transition: transform 0.25s; flex-shrink: 0; }
+
+  .news-card:hover .card-chevron { color: var(--accent2); }
+  .news-card.expanded .card-chevron { color: var(--accent2); border-top-color: rgba(124,106,247,0.2); }
+  .news-card.expanded .card-chevron svg { transform: rotate(180deg); }
+
+  /* Card body (expanded) */
+  .card-body {
+    display: none;
+    padding: 20px 20px 20px 23px;
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.35);
+  }
+
+  .news-card.expanded .card-body { display: block; animation: fadeIn 0.2s ease; }
+
+  .cb-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 7px;
+  }
+
+  .cb-text { font-size: 14px; color: #c8c8c8; line-height: 1.75; margin-bottom: 18px; font-weight: 400; }
+
+  .card-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .cdg-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: border-color 0.15s;
+  }
+
+  .cdg-item:hover { border-color: var(--border2); }
+  .cdg-val { margin-top: 5px; font-size: 13px; color: var(--text); }
+
+  .cb-tickers-label { margin-bottom: 7px; }
+
+  .cb-tickers { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; }
+
+  .card-senal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .card-senal strong { color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; }
+  .senal-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Badges ── */
   .badge {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -612,49 +552,21 @@
   .badge-conf.conf-mid { background: rgba(245,173,69,0.08); color: var(--amber); border-color: rgba(245,173,69,0.22); }
   .badge-conf.conf-low { background: rgba(255,96,96,0.08); color: var(--red); border-color: rgba(255,96,96,0.22); }
 
-  .card-tickers {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-
+  /* ── Tickers ── */
   .ticker {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     background: rgba(124,106,247,0.08);
-    border: 1px solid rgba(124,106,247,0.18);
+    border: 1px solid rgba(124,106,247,0.2);
     color: var(--accent2);
     padding: 2px 8px;
     border-radius: 4px;
     cursor: default;
     transition: all 0.15s;
+    display: inline-block;
   }
 
-  .ticker:hover {
-    background: rgba(124,106,247,0.16);
-    border-color: rgba(124,106,247,0.35);
-  }
-
-  .card-senal {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .card-senal strong {
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-  }
-
-  .senal-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .ticker:hover { background: rgba(124,106,247,0.16); border-color: rgba(124,106,247,0.38); }
 
   /* ── Skeleton ── */
   .skeleton-card {
@@ -672,10 +584,7 @@
     border-radius: 4px;
   }
 
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
+  @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 
   .sk-row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
   .sk-title { height: 17px; flex: 1; }
@@ -684,7 +593,7 @@
   .sk-line:last-of-type { width: 55%; }
   .sk-badges { height: 22px; width: 45%; margin-top: 12px; border-radius: 100px; }
 
-  /* ── Empty / error ── */
+  /* ── Empty / Error ── */
   .status-msg {
     text-align: center;
     padding: 80px 0;
@@ -693,35 +602,18 @@
     font-size: 13px;
   }
 
-  .status-msg .st-icon {
-    width: 40px; height: 40px;
-    margin: 0 auto 16px;
-    display: block;
-    opacity: 0.35;
-  }
+  .status-msg .st-icon { width: 40px; height: 40px; margin: 0 auto 16px; display: block; opacity: 0.3; }
 
-  .error-box {
-    text-align: center;
-    padding: 60px 0;
-    color: var(--red);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-  }
-
-  .error-box .err-icon {
-    width: 36px; height: 36px;
-    margin: 0 auto 14px;
-    display: block;
-    opacity: 0.65;
-  }
+  .error-box { text-align: center; padding: 60px 0; color: var(--red); font-family: 'DM Mono', monospace; font-size: 13px; }
+  .error-box .err-icon { width: 36px; height: 36px; margin: 0 auto 14px; display: block; opacity: 0.6; }
 
   .btn-retry {
     margin-top: 18px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(240,92,92,0.1);
-    border: 1px solid rgba(240,92,92,0.25);
+    background: rgba(255,96,96,0.1);
+    border: 1px solid rgba(255,96,96,0.25);
     color: var(--red);
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
@@ -731,7 +623,7 @@
     transition: all 0.2s;
   }
 
-  .btn-retry:hover { background: rgba(240,92,92,0.18); }
+  .btn-retry:hover { background: rgba(255,96,96,0.18); }
 
   /* ── Toast ── */
   .toast {
@@ -746,7 +638,7 @@
     font-size: 13px;
     padding: 10px 20px;
     border-radius: 100px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
     z-index: 999;
     display: flex;
@@ -757,14 +649,12 @@
   }
 
   .toast.show { transform: translateX(-50%) translateY(0); }
-
   .toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
   /* ── Scroll-to-top ── */
   .scroll-top {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 24px; right: 24px;
     width: 40px; height: 40px;
     background: var(--bg3);
     border: 1px solid var(--border2);
@@ -778,7 +668,7 @@
     opacity: 0;
     pointer-events: none;
     z-index: 99;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
   }
 
   .scroll-top.visible { opacity: 1; pointer-events: auto; }
@@ -786,10 +676,7 @@
   .scroll-top svg { width: 16px; height: 16px; }
 
   /* ── Footer ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 22px 0;
-  }
+  footer { border-top: 1px solid var(--border); padding: 22px 0; }
 
   .footer-inner {
     display: flex;
@@ -799,20 +686,14 @@
     flex-wrap: wrap;
   }
 
-  footer p {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
-
+  footer p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
   footer span { color: var(--accent2); }
 
-  /* ── Animations ── */
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spin { to{transform:rotate(360deg)} }
 
   /* ── Responsive ── */
   @media (max-width: 768px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
     .hero h2 { font-size: 32px; letter-spacing: -1px; }
     .sort-wrap { flex: 1; }
     .sort-select { width: 100%; }
@@ -823,12 +704,13 @@
     .header-right .last-update { display: none; }
     .hero { padding: 36px 0 24px; }
     .hero h2 { font-size: 26px; }
-    .news-card { padding: 16px 16px 16px 18px; }
+    .card-header { padding: 16px 16px 14px 18px; }
+    .card-body { padding: 16px 16px 16px 18px; }
     .card-top { flex-direction: column; gap: 6px; }
     .card-fecha { align-self: flex-start; }
     .stat-value { font-size: 26px; }
+    .card-detail-grid { grid-template-columns: 1fr; }
     .controls { flex-direction: column; align-items: stretch; }
-    .search-wrap { min-width: unset; }
     .sort-wrap { flex: unset; }
     .sort-select { width: 100%; }
     .toast { font-size: 12px; padding: 8px 16px; bottom: 16px; }
@@ -847,7 +729,7 @@
 
 <!-- Scroll to top -->
 <button class="scroll-top" id="scroll-top" aria-label="Volver al inicio" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
 <header>
@@ -879,41 +761,16 @@
     </div>
 
     <div class="stats-grid" id="stats" role="region" aria-label="Estadísticas">
-      <div class="stat-card s-default">
-        <div class="stat-label">Total noticias</div>
-        <div class="stat-value default">—</div>
-        <div class="stat-sub">&nbsp;</div>
-      </div>
-      <div class="stat-card s-green">
-        <div class="stat-label">Alcistas</div>
-        <div class="stat-value green">—</div>
-        <div class="stat-sub">&nbsp;</div>
-      </div>
-      <div class="stat-card s-red">
-        <div class="stat-label">Bajistas</div>
-        <div class="stat-value red">—</div>
-        <div class="stat-sub">&nbsp;</div>
-      </div>
-      <div class="stat-card s-accent">
-        <div class="stat-label">Alta relevancia</div>
-        <div class="stat-value accent">—</div>
-        <div class="stat-sub">&nbsp;</div>
-      </div>
+      <div class="stat-card s-default"><div class="stat-label">Total noticias</div><div class="stat-value default">—</div><div class="stat-sub">&nbsp;</div></div>
+      <div class="stat-card s-green"><div class="stat-label">Alcistas</div><div class="stat-value green">—</div><div class="stat-sub">&nbsp;</div></div>
+      <div class="stat-card s-red"><div class="stat-label">Bajistas</div><div class="stat-value red">—</div><div class="stat-sub">&nbsp;</div></div>
+      <div class="stat-card s-accent"><div class="stat-label">Alta relevancia</div><div class="stat-value accent">—</div><div class="stat-sub">&nbsp;</div></div>
     </div>
 
     <div class="controls" role="search" aria-label="Buscar y ordenar">
       <div class="search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          type="search"
-          class="search-input"
-          id="search-input"
-          placeholder="Buscar noticias, tickers, sectores..."
-          oninput="aplicarFiltros()"
-          aria-label="Buscar noticias"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" class="search-input" id="search-input" placeholder="Buscar noticias, tickers, sectores..." oninput="aplicarFiltros()" aria-label="Buscar noticias">
       </div>
       <div class="sort-wrap">
         <select class="sort-select" id="sort-select" onchange="aplicarFiltros()" aria-label="Ordenar por">
@@ -922,32 +779,18 @@
           <option value="confidence">Mayor confianza</option>
           <option value="relevance">Alta relevancia primero</option>
         </select>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
 
     <div class="filters" role="group" aria-label="Filtrar por tipo">
       <span class="filters-label">FILTRAR:</span>
-      <button class="filter-btn active" onclick="setFiltro('todos', this)">
-        Todos <span class="filter-count" id="cnt-todos">—</span>
-      </button>
-      <button class="filter-btn" onclick="setFiltro('Alcista', this)">
-        Alcista <span class="filter-count" id="cnt-alcista">—</span>
-      </button>
-      <button class="filter-btn" onclick="setFiltro('Bajista', this)">
-        Bajista <span class="filter-count" id="cnt-bajista">—</span>
-      </button>
-      <button class="filter-btn" onclick="setFiltro('Neutro', this)">
-        Neutro <span class="filter-count" id="cnt-neutro">—</span>
-      </button>
-      <button class="filter-btn" onclick="setFiltro('Mixto', this)">
-        Mixto <span class="filter-count" id="cnt-mixto">—</span>
-      </button>
-      <button class="filter-btn" onclick="setFiltro('Alta', this)">
-        Alta relevancia <span class="filter-count" id="cnt-alta">—</span>
-      </button>
+      <button class="filter-btn active" onclick="setFiltro('todos',this)">Todos <span class="filter-count" id="cnt-todos">—</span></button>
+      <button class="filter-btn" onclick="setFiltro('Alcista',this)">Alcista <span class="filter-count" id="cnt-alcista">—</span></button>
+      <button class="filter-btn" onclick="setFiltro('Bajista',this)">Bajista <span class="filter-count" id="cnt-bajista">—</span></button>
+      <button class="filter-btn" onclick="setFiltro('Neutro',this)">Neutro <span class="filter-count" id="cnt-neutro">—</span></button>
+      <button class="filter-btn" onclick="setFiltro('Mixto',this)">Mixto <span class="filter-count" id="cnt-mixto">—</span></button>
+      <button class="filter-btn" onclick="setFiltro('Alta',this)">Alta relevancia <span class="filter-count" id="cnt-alta">—</span></button>
     </div>
 
     <div class="results-header" id="results-header" style="display:none">
@@ -973,31 +816,25 @@
 
 <script>
 const SHEET_ID = '1Mpn7NhJaPQWvfvtah6zWQ9h4jfSG4rOmYdeQoZt_yA4';
-let allData = [];
-let filtroActivo = 'todos';
+let allData = [], filtroActivo = 'todos';
 
 // ── CSV ──
 function parseCSV(text) {
   const rows = [];
-  const lines = text.trim().split('\n');
-  for (const line of lines) {
-    const row = [];
-    let cur = '', inQ = false;
+  for (const line of text.trim().split('\n')) {
+    const row = []; let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       if (line[i] === '"') { inQ = !inQ; }
       else if (line[i] === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
       else { cur += line[i]; }
     }
-    row.push(cur.trim());
-    rows.push(row);
+    row.push(cur.trim()); rows.push(row);
   }
   return rows;
 }
 
 // ── Helpers ──
-function parseConfianza(v) {
-  return parseInt((v || '').replace(/[^0-9]/g, '')) || 0;
-}
+function parseConfianza(v) { return parseInt((v||'').replace(/[^0-9]/g,'')) || 0; }
 
 function confClass(v) {
   const n = parseConfianza(v);
@@ -1017,8 +854,7 @@ function impactClass(v) {
 
 function badgeImpacto(v) {
   if (!v) return '';
-  const vl = v.toLowerCase();
-  const cl = vl.includes('alc') ? 'alcista' : vl.includes('baj') ? 'bajista' : vl.includes('mix') ? 'mixto' : 'neutro';
+  const cl = v.toLowerCase().includes('alc') ? 'alcista' : v.toLowerCase().includes('baj') ? 'bajista' : v.toLowerCase().includes('mix') ? 'mixto' : 'neutro';
   return `<span class="badge badge-${cl}">${v}</span>`;
 }
 
@@ -1028,9 +864,7 @@ function badgeRelevancia(v) {
   return `<span class="badge badge-${cl}">Rel. ${v}</span>`;
 }
 
-function badgeSector(v) {
-  return v ? `<span class="badge badge-sector">${v}</span>` : '';
-}
+function badgeSector(v) { return v ? `<span class="badge badge-sector">${v}</span>` : ''; }
 
 function badgeConf(v) {
   if (!v) return '';
@@ -1039,29 +873,31 @@ function badgeConf(v) {
 
 function renderTickers(v) {
   if (!v) return '';
-  return v.split(',').map(t => t.trim().replace(/['"]/g, '')).filter(Boolean)
-    .map(t => `<span class="ticker">${t}</span>`).join('');
+  return v.split(',').map(t=>t.trim().replace(/['"]/g,'')).filter(Boolean)
+    .map(t=>`<span class="ticker">${t}</span>`).join('');
 }
 
 function senalColor(v) {
-  if (!v) return '#7a798a';
+  if (!v) return '#909090';
   const vl = v.toLowerCase();
-  if (vl.includes('compra')) return '#2dd68a';
-  if (vl.includes('venta')) return '#f05c5c';
-  if (vl.includes('mantener')) return '#5ca8f0';
-  return '#7a798a';
+  if (vl.includes('compra')) return '#3ddc90';
+  if (vl.includes('venta')) return '#ff6060';
+  if (vl.includes('mantener')) return '#60b0ff';
+  return '#f5ad45';
 }
 
 function formatFecha(v) {
   if (!v) return '';
-  try {
-    return new Date(v).toLocaleString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
-  } catch(e) { return v; }
+  try { return new Date(v).toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }
+  catch(e) { return v; }
 }
 
 function textoBusqueda(r) {
-  return [(r[1]||''), (r[2]||''), (r[4]||''), (r[5]||'')].join(' ').toLowerCase();
+  return [(r[1]||''),(r[2]||''),(r[4]||''),(r[5]||'')].join(' ').toLowerCase();
 }
+
+// ── Card toggle ──
+function toggleCard(el) { el.classList.toggle('expanded'); }
 
 // ── Toast ──
 let toastTimer;
@@ -1081,43 +917,26 @@ window.addEventListener('scroll', () => {
 // ── Stats ──
 function renderStats(data) {
   const total = data.length;
-  const alcistas = data.filter(r => (r[3]||'').includes('Alcista')).length;
-  const bajistas = data.filter(r => (r[3]||'').includes('Bajista')).length;
-  const altas = data.filter(r => (r[7]||'').includes('Alta')).length;
-  const pct = n => total > 0 ? Math.round(n / total * 100) + '% del total' : '—';
+  const alcistas = data.filter(r=>(r[3]||'').includes('Alcista')).length;
+  const bajistas = data.filter(r=>(r[3]||'').includes('Bajista')).length;
+  const altas = data.filter(r=>(r[7]||'').includes('Alta')).length;
+  const pct = n => total > 0 ? Math.round(n/total*100)+'% del total' : '—';
 
   document.getElementById('stats').innerHTML = `
-    <div class="stat-card s-default">
-      <div class="stat-label">Total noticias</div>
-      <div class="stat-value default">${total}</div>
-      <div class="stat-sub">últimas 24h</div>
-    </div>
-    <div class="stat-card s-green">
-      <div class="stat-label">Alcistas</div>
-      <div class="stat-value green">${alcistas}</div>
-      <div class="stat-sub">${pct(alcistas)}</div>
-    </div>
-    <div class="stat-card s-red">
-      <div class="stat-label">Bajistas</div>
-      <div class="stat-value red">${bajistas}</div>
-      <div class="stat-sub">${pct(bajistas)}</div>
-    </div>
-    <div class="stat-card s-accent">
-      <div class="stat-label">Alta relevancia</div>
-      <div class="stat-value accent">${altas}</div>
-      <div class="stat-sub">${pct(altas)}</div>
-    </div>
-  `;
+    <div class="stat-card s-default"><div class="stat-label">Total noticias</div><div class="stat-value default">${total}</div><div class="stat-sub">últimas 24h</div></div>
+    <div class="stat-card s-green"><div class="stat-label">Alcistas</div><div class="stat-value green">${alcistas}</div><div class="stat-sub">${pct(alcistas)}</div></div>
+    <div class="stat-card s-red"><div class="stat-label">Bajistas</div><div class="stat-value red">${bajistas}</div><div class="stat-sub">${pct(bajistas)}</div></div>
+    <div class="stat-card s-accent"><div class="stat-label">Alta relevancia</div><div class="stat-value accent">${altas}</div><div class="stat-sub">${pct(altas)}</div></div>`;
 }
 
 // ── Filter counts ──
 function updateCounts(data) {
   document.getElementById('cnt-todos').textContent = data.length;
-  document.getElementById('cnt-alcista').textContent = data.filter(r => (r[3]||'').includes('Alcista')).length;
-  document.getElementById('cnt-bajista').textContent = data.filter(r => (r[3]||'').includes('Bajista')).length;
-  document.getElementById('cnt-neutro').textContent = data.filter(r => (r[3]||'').includes('Neutro')).length;
-  document.getElementById('cnt-mixto').textContent = data.filter(r => (r[3]||'').includes('Mixto')).length;
-  document.getElementById('cnt-alta').textContent = data.filter(r => (r[7]||'').includes('Alta')).length;
+  document.getElementById('cnt-alcista').textContent = data.filter(r=>(r[3]||'').includes('Alcista')).length;
+  document.getElementById('cnt-bajista').textContent = data.filter(r=>(r[3]||'').includes('Bajista')).length;
+  document.getElementById('cnt-neutro').textContent = data.filter(r=>(r[3]||'').includes('Neutro')).length;
+  document.getElementById('cnt-mixto').textContent = data.filter(r=>(r[3]||'').includes('Mixto')).length;
+  document.getElementById('cnt-alta').textContent = data.filter(r=>(r[7]||'').includes('Alta')).length;
 }
 
 // ── Render cards ──
@@ -1142,53 +961,56 @@ function renderCards(data) {
   }
 
   container.innerHTML = data.map((r, i) => {
-    const resumen = r[2] || '';
-    const isLong = resumen.length > 220;
+    const preview = (r[2]||'').substring(0, 140) + ((r[2]||'').length > 140 ? '…' : '');
     return `
-      <div class="news-card ${impactClass(r[3])}" style="animation-delay:${Math.min(i * 28, 280)}ms">
-        <div class="card-top">
-          <div class="card-title">${r[1] || 'Sin título'}</div>
-          ${r[0] ? `<div class="card-fecha">${formatFecha(r[0])}</div>` : ''}
+      <div class="news-card ${impactClass(r[3])}" onclick="toggleCard(this)" style="animation-delay:${Math.min(i*28,280)}ms">
+        <div class="card-header">
+          <div class="card-top">
+            <div class="card-title">${r[1]||'Sin título'}</div>
+            ${r[0] ? `<div class="card-fecha">${formatFecha(r[0])}</div>` : ''}
+          </div>
+          <div class="card-preview">${preview}</div>
+          <div class="card-badges">
+            ${badgeImpacto(r[3])} ${badgeSector(r[5])} ${badgeRelevancia(r[7])} ${badgeConf(r[6])}
+          </div>
         </div>
-        <div class="card-resumen${isLong ? ' collapsed' : ''}" id="res-${i}">${resumen}</div>
-        ${isLong ? `<button class="btn-expand" onclick="toggleExpand(${i},this)" data-expanded="false">Ver más ↓</button>` : ''}
-        <div class="card-badges">
-          ${badgeImpacto(r[3])}
-          ${badgeSector(r[5])}
-          ${badgeRelevancia(r[7])}
-          ${badgeConf(r[6])}
+        <div class="card-chevron">
+          <span>Ver análisis completo</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        ${r[4] ? `<div class="card-tickers">${renderTickers(r[4])}</div>` : ''}
-        ${r[8] ? `
-          <div class="card-senal">
-            <div class="senal-dot" style="background:${senalColor(r[8])}"></div>
-            <span>Señal: <strong>${r[8]}</strong></span>
-          </div>` : ''}
+        <div class="card-body">
+          <div class="cb-label">Resumen ejecutivo</div>
+          <div class="cb-text">${r[2]||'—'}</div>
+          <div class="card-detail-grid">
+            <div class="cdg-item"><div class="cb-label">Impacto de mercado</div><div class="cdg-val">${badgeImpacto(r[3])||'—'}</div></div>
+            <div class="cdg-item"><div class="cb-label">Sector</div><div class="cdg-val">${badgeSector(r[5])||'—'}</div></div>
+            <div class="cdg-item"><div class="cb-label">Confianza</div><div class="cdg-val">${badgeConf(r[6])||'—'}</div></div>
+            <div class="cdg-item"><div class="cb-label">Relevancia</div><div class="cdg-val">${badgeRelevancia(r[7])||'—'}</div></div>
+          </div>
+          ${r[4] ? `<div class="cb-label cb-tickers-label">Activos afectados</div><div class="cb-tickers">${renderTickers(r[4])}</div>` : ''}
+          ${r[8] ? `
+            <div class="card-senal">
+              <div class="senal-dot" style="background:${senalColor(r[8])}"></div>
+              <span>Señal: <strong>${r[8]}</strong></span>
+            </div>` : ''}
+        </div>
       </div>`;
   }).join('');
-}
-
-function toggleExpand(i, btn) {
-  const el = document.getElementById(`res-${i}`);
-  const expanded = btn.dataset.expanded === 'true';
-  el.classList.toggle('collapsed', expanded);
-  btn.textContent = expanded ? 'Ver más ↓' : 'Ver menos ↑';
-  btn.dataset.expanded = expanded ? 'false' : 'true';
 }
 
 // ── Sort ──
 function sortData(data, method) {
   const copy = [...data];
-  if (method === 'oldest') return copy.sort((a, b) => new Date(a[0]) - new Date(b[0]));
-  if (method === 'confidence') return copy.sort((a, b) => parseConfianza(b[6]) - parseConfianza(a[6]));
+  if (method === 'oldest') return copy.sort((a,b) => new Date(a[0]) - new Date(b[0]));
+  if (method === 'confidence') return copy.sort((a,b) => parseConfianza(b[6]) - parseConfianza(a[6]));
   if (method === 'relevance') {
-    const rv = { 'Alta': 3, 'Media': 2, 'Baja': 1 };
-    return copy.sort((a, b) => (rv[b[7]] || 0) - (rv[a[7]] || 0));
+    const rv = { 'Alta':3, 'Media':2, 'Baja':1 };
+    return copy.sort((a,b) => (rv[b[7]]||0) - (rv[a[7]]||0));
   }
-  return copy.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+  return copy.sort((a,b) => new Date(b[0]) - new Date(a[0]));
 }
 
-// ── Filter ──
+// ── Filter + Search ──
 function setFiltro(tipo, btn) {
   filtroActivo = tipo;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1201,12 +1023,11 @@ function aplicarFiltros() {
   const sortMethod = document.getElementById('sort-select')?.value || 'newest';
 
   let filtered = allData;
-
-  if (filtroActivo === 'Alcista') filtered = filtered.filter(r => (r[3]||'').includes('Alcista'));
-  else if (filtroActivo === 'Bajista') filtered = filtered.filter(r => (r[3]||'').includes('Bajista'));
-  else if (filtroActivo === 'Neutro') filtered = filtered.filter(r => (r[3]||'').includes('Neutro'));
-  else if (filtroActivo === 'Mixto') filtered = filtered.filter(r => (r[3]||'').includes('Mixto'));
-  else if (filtroActivo === 'Alta') filtered = filtered.filter(r => (r[7]||'').includes('Alta'));
+  if (filtroActivo === 'Alcista') filtered = filtered.filter(r=>(r[3]||'').includes('Alcista'));
+  else if (filtroActivo === 'Bajista') filtered = filtered.filter(r=>(r[3]||'').includes('Bajista'));
+  else if (filtroActivo === 'Neutro') filtered = filtered.filter(r=>(r[3]||'').includes('Neutro'));
+  else if (filtroActivo === 'Mixto') filtered = filtered.filter(r=>(r[3]||'').includes('Mixto'));
+  else if (filtroActivo === 'Alta') filtered = filtered.filter(r=>(r[7]||'').includes('Alta'));
 
   if (query) filtered = filtered.filter(r => textoBusqueda(r).includes(query));
 
@@ -1237,15 +1058,13 @@ async function cargar() {
   showSkeleton();
 
   try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Hoja1`;
-    const res = await fetch(url);
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Hoja1`);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const text = await res.text();
-    const rows = parseCSV(text);
+    const rows = parseCSV(await res.text());
     allData = rows.slice(1).filter(r => r[1] && r[1].length > 2);
 
     document.getElementById('last-update').textContent =
-      'Act. ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+      'Act. ' + new Date().toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
 
     renderStats(allData);
     updateCounts(allData);
@@ -1260,7 +1079,7 @@ async function cargar() {
           <circle cx="12" cy="16" r="0.5" fill="currentColor"/>
         </svg>
         Error al cargar datos.<br>
-        <small style="opacity:0.65;display:block;margin-top:6px">${e.message}</small>
+        <small style="opacity:0.6;display:block;margin-top:6px">${e.message}</small>
         <button class="btn-retry" onclick="cargar()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
