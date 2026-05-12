@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monitor Financiero IA</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>FinanceIA Monitor · Noticias Bursátiles con IA</title>
+<meta name="description" content="Monitor automático de noticias bursátiles analizadas con IA. Señales de inversión, impacto y relevancia generados por Claude.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
 
   :root {
     --bg: #0a0a0f;
@@ -28,6 +31,11 @@
     --blue-bg: rgba(92,168,240,0.08);
   }
 
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -37,12 +45,11 @@
     min-height: 100vh;
   }
 
-  /* Grid de fondo */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: 
+    background-image:
       linear-gradient(rgba(124,106,247,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(124,106,247,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -50,16 +57,23 @@
     z-index: 0;
   }
 
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-  /* Header */
+  /* ── Header ── */
   header {
     border-bottom: 1px solid var(--border);
-    padding: 20px 0;
+    padding: 15px 0;
     position: sticky;
     top: 0;
     background: rgba(10,10,15,0.92);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     z-index: 100;
   }
 
@@ -70,22 +84,20 @@
     gap: 16px;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .logo { display: flex; align-items: center; gap: 10px; }
 
   .logo-dot {
     width: 8px; height: 8px;
-    background: var(--accent);
+    background: var(--green);
     border-radius: 50%;
-    animation: pulse 2s infinite;
+    animation: pulse-live 2s infinite;
+    box-shadow: 0 0 8px rgba(45,214,138,0.5);
+    flex-shrink: 0;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px rgba(45,214,138,0.5); }
+    50% { opacity: 0.55; transform: scale(0.8); box-shadow: 0 0 3px rgba(45,214,138,0.2); }
   }
 
   .logo h1 {
@@ -96,27 +108,35 @@
     color: var(--text);
   }
 
-  .logo span {
+  .logo-badge {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    background: rgba(124,106,247,0.1);
-    border: 1px solid rgba(124,106,247,0.2);
+    font-size: 10px;
+    color: var(--green);
+    background: rgba(45,214,138,0.1);
+    border: 1px solid rgba(45,214,138,0.25);
     padding: 2px 8px;
     border-radius: 4px;
     letter-spacing: 0.5px;
   }
 
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .header-right { display: flex; align-items: center; gap: 12px; }
 
   .last-update {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .last-update::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--muted);
+    border-radius: 50%;
+    opacity: 0.4;
+    flex-shrink: 0;
   }
 
   .btn-refresh {
@@ -128,52 +148,100 @@
     color: var(--accent2);
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
-    padding: 6px 14px;
-    border-radius: 6px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
   }
 
-  .btn-refresh:hover { background: rgba(124,106,247,0.2); border-color: rgba(124,106,247,0.4); }
-  .btn-refresh svg { width: 14px; height: 14px; }
+  .btn-refresh:hover {
+    background: rgba(124,106,247,0.2);
+    border-color: rgba(124,106,247,0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124,106,247,0.2);
+  }
 
-  /* Hero */
+  .btn-refresh:active { transform: translateY(0); }
+  .btn-refresh svg { width: 14px; height: 14px; transition: transform 0.3s; }
+  .btn-refresh.loading svg { animation: spin 0.8s linear infinite; }
+  .btn-refresh:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+  /* ── Hero ── */
   .hero {
-    padding: 48px 0 32px;
+    padding: 56px 0 36px;
     border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    left: -120px;
+    width: 600px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, rgba(124,106,247,0.1) 0%, transparent 65%);
+    pointer-events: none;
   }
 
   .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--accent);
-    letter-spacing: 1.5px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
+    background: rgba(124,106,247,0.08);
+    border: 1px solid rgba(124,106,247,0.18);
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse-accent 2s infinite;
+  }
+
+  @keyframes pulse-accent {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
   }
 
   .hero h2 {
     font-family: 'Syne', sans-serif;
-    font-size: 38px;
+    font-size: 42px;
     font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -1px;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
     color: var(--text);
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .hero h2 em {
     font-style: normal;
-    color: var(--accent2);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, #c4b5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .hero p {
     color: var(--muted);
     font-size: 15px;
     max-width: 520px;
+    line-height: 1.75;
   }
 
-  /* Stats */
+  /* ── Stats ── */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -185,12 +253,35 @@
   .stat-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 18px;
-    transition: border-color 0.2s;
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
   }
 
-  .stat-card:hover { border-color: var(--border2); }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 12px 12px 0 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .stat-card.s-default::after { background: var(--accent); }
+  .stat-card.s-green::after { background: var(--green); }
+  .stat-card.s-red::after { background: var(--red); }
+  .stat-card.s-accent::after { background: var(--accent2); }
+
+  .stat-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+
+  .stat-card:hover::after { opacity: 1; }
 
   .stat-label {
     font-family: 'DM Mono', monospace;
@@ -198,14 +289,22 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .stat-value {
     font-family: 'Syne', sans-serif;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
     line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .stat-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    min-height: 14px;
   }
 
   .stat-value.green { color: var(--green); }
@@ -213,20 +312,102 @@
   .stat-value.accent { color: var(--accent2); }
   .stat-value.default { color: var(--text); }
 
-  /* Filtros */
+  /* ── Controls (search + sort) ── */
+  .controls {
+    padding: 20px 0 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px 8px 35px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .search-input::placeholder { color: var(--muted); }
+
+  .search-input:focus {
+    border-color: rgba(124,106,247,0.45);
+    outline: none;
+    background: var(--bg3);
+    box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
+  }
+
+  .sort-wrap {
+    position: relative;
+  }
+
+  .sort-wrap svg {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px; height: 12px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .sort-select {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 32px 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .sort-select:focus {
+    border-color: rgba(124,106,247,0.45);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(124,106,247,0.08);
+  }
+
+  /* ── Filtros ── */
   .filters {
     display: flex;
-    gap: 8px;
-    padding: 20px 0;
+    gap: 6px;
+    padding: 14px 0 16px;
     flex-wrap: wrap;
     align-items: center;
+    border-bottom: 1px solid var(--border);
   }
 
   .filters-label {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--muted);
-    margin-right: 4px;
+    letter-spacing: 1px;
+    margin-right: 2px;
   }
 
   .filter-btn {
@@ -234,34 +415,98 @@
     border: 1px solid var(--border2);
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
     border-radius: 100px;
     cursor: pointer;
     transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
-  .filter-btn:hover { color: var(--text); border-color: var(--border2); }
-  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filter-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: rgba(255,255,255,0.07);
+    padding: 1px 5px;
+    border-radius: 100px;
+    min-width: 18px;
+    text-align: center;
+  }
 
-  /* Cards */
-  .cards-list { padding-bottom: 60px; }
+  .filter-btn:hover {
+    color: var(--text);
+    border-color: rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(124,106,247,0.3);
+  }
+
+  .filter-btn.active .filter-count { background: rgba(255,255,255,0.2); }
+
+  /* ── Results header ── */
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0 10px;
+    min-height: 42px;
+  }
+
+  .results-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .results-count strong { color: var(--text); font-weight: 500; }
+
+  /* ── Cards ── */
+  .cards-list { padding-bottom: 80px; }
 
   .news-card {
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 24px;
+    padding: 20px 20px 20px 23px;
     margin-bottom: 10px;
     transition: all 0.2s;
-    animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.25s ease both;
+    position: relative;
+    overflow: hidden;
   }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .news-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 12px 0 0 12px;
+    transition: opacity 0.2s;
+  }
+
+  .news-card.impact-alcista::before { background: var(--green); }
+  .news-card.impact-bajista::before { background: var(--red); }
+  .news-card.impact-mixto::before { background: var(--amber); }
+  .news-card.impact-neutro::before { background: var(--muted); opacity: 0.3; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   .news-card:hover {
     border-color: var(--border2);
     background: var(--bg3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   }
 
   .card-top {
@@ -274,7 +519,7 @@
 
   .card-title {
     font-family: 'Syne', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--text);
     line-height: 1.4;
@@ -283,18 +528,42 @@
 
   .card-fecha {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--muted);
     white-space: nowrap;
-    padding-top: 3px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
   }
 
   .card-resumen {
     font-size: 13px;
     color: var(--muted);
-    line-height: 1.65;
+    line-height: 1.7;
     margin-bottom: 14px;
   }
+
+  .card-resumen.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .btn-expand {
+    background: none;
+    border: none;
+    color: var(--accent2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0 0 10px;
+    display: block;
+  }
+
+  .btn-expand:hover { color: var(--accent); }
 
   .card-badges {
     display: flex;
@@ -306,8 +575,8 @@
 
   .badge {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    padding: 3px 10px;
+    font-size: 10px;
+    padding: 3px 8px;
     border-radius: 4px;
     letter-spacing: 0.3px;
     font-weight: 500;
@@ -322,6 +591,21 @@
   .badge-media { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(240,168,64,0.15); }
   .badge-baja { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,214,138,0.15); }
 
+  .badge-conf {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+  }
+
+  .badge-conf.conf-high { background: rgba(45,214,138,0.07); color: var(--green); border-color: rgba(45,214,138,0.18); }
+  .badge-conf.conf-mid { background: rgba(240,168,64,0.07); color: var(--amber); border-color: rgba(240,168,64,0.18); }
+  .badge-conf.conf-low { background: rgba(240,92,92,0.07); color: var(--red); border-color: rgba(240,92,92,0.18); }
+
   .card-tickers {
     display: flex;
     gap: 4px;
@@ -333,10 +617,17 @@
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     background: rgba(124,106,247,0.08);
-    border: 1px solid rgba(124,106,247,0.15);
+    border: 1px solid rgba(124,106,247,0.18);
     color: var(--accent2);
     padding: 2px 8px;
     border-radius: 4px;
+    cursor: default;
+    transition: all 0.15s;
+  }
+
+  .ticker:hover {
+    background: rgba(124,106,247,0.16);
+    border-color: rgba(124,106,247,0.35);
   }
 
   .card-senal {
@@ -349,35 +640,157 @@
     color: var(--muted);
   }
 
-  .card-senal strong { color: var(--text); font-weight: 500; }
+  .card-senal strong {
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
 
-  .senal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .senal-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-  /* Loading / empty */
+  /* ── Skeleton ── */
+  .skeleton-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 10px;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg3) 0%, rgba(255,255,255,0.05) 50%, var(--bg3) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .sk-row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+  .sk-title { height: 17px; flex: 1; }
+  .sk-date { height: 22px; width: 70px; border-radius: 4px; flex-shrink: 0; }
+  .sk-line { height: 13px; margin-bottom: 7px; }
+  .sk-line:last-of-type { width: 55%; }
+  .sk-badges { height: 22px; width: 45%; margin-top: 12px; border-radius: 100px; }
+
+  /* ── Empty / error ── */
   .status-msg {
     text-align: center;
-    padding: 60px 0;
+    padding: 80px 0;
     color: var(--muted);
     font-family: 'DM Mono', monospace;
     font-size: 13px;
   }
 
-  .spinner {
-    width: 24px; height: 24px;
-    border: 2px solid var(--border2);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  .status-msg .st-icon {
+    width: 40px; height: 40px;
     margin: 0 auto 16px;
+    display: block;
+    opacity: 0.35;
   }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .error-box {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--red);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
 
-  /* Footer */
+  .error-box .err-icon {
+    width: 36px; height: 36px;
+    margin: 0 auto 14px;
+    display: block;
+    opacity: 0.65;
+  }
+
+  .btn-retry {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(240,92,92,0.1);
+    border: 1px solid rgba(240,92,92,0.25);
+    color: var(--red);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-retry:hover { background: rgba(240,92,92,0.18); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(90px);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 100px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  /* ── Scroll-to-top ── */
+  .scroll-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 40px; height: 40px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 99;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+
+  .scroll-top.visible { opacity: 1; pointer-events: auto; }
+  .scroll-top:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-2px); }
+  .scroll-top svg { width: 16px; height: 16px; }
+
+  /* ── Footer ── */
   footer {
     border-top: 1px solid var(--border);
-    padding: 20px 0;
-    text-align: center;
+    padding: 22px 0;
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
   footer p {
@@ -388,26 +801,60 @@
 
   footer span { color: var(--accent2); }
 
-  @media (max-width: 640px) {
+  /* ── Animations ── */
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero h2 { font-size: 28px; }
+    .hero h2 { font-size: 32px; letter-spacing: -1px; }
+    .sort-wrap { flex: 1; }
+    .sort-select { width: 100%; }
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 0 16px; }
     .header-right .last-update { display: none; }
+    .hero { padding: 36px 0 24px; }
+    .hero h2 { font-size: 26px; }
+    .news-card { padding: 16px 16px 16px 18px; }
+    .card-top { flex-direction: column; gap: 6px; }
+    .card-fecha { align-self: flex-start; }
+    .stat-value { font-size: 26px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-wrap { min-width: unset; }
+    .sort-wrap { flex: unset; }
+    .sort-select { width: 100%; }
+    .toast { font-size: 12px; padding: 8px 16px; bottom: 16px; }
+    .scroll-top { bottom: 16px; right: 16px; }
+    .footer-inner { flex-direction: column; gap: 4px; }
   }
 </style>
 </head>
 <body>
 
+<!-- Toast -->
+<div class="toast" id="toast" aria-live="polite">
+  <div class="toast-dot"></div>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scroll-top" aria-label="Volver al inicio" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
 <header>
   <div class="container">
     <div class="header-inner">
       <div class="logo">
-        <div class="logo-dot"></div>
+        <div class="logo-dot" aria-hidden="true"></div>
         <h1>FinanceIA Monitor</h1>
-        <span>LIVE</span>
+        <span class="logo-badge">LIVE</span>
       </div>
       <div class="header-right">
-        <span class="last-update" id="last-update">—</span>
-        <button class="btn-refresh" onclick="cargar()">
+        <span class="last-update" id="last-update" aria-live="polite">—</span>
+        <button class="btn-refresh" id="btn-refresh" onclick="cargar()" aria-label="Actualizar noticias">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
           Actualizar
         </button>
@@ -418,42 +865,103 @@
 
 <main>
   <div class="container">
+
     <div class="hero">
       <p class="hero-label">Powered by Claude AI · Yahoo Finance RSS</p>
       <h2>Noticias bursátiles<br><em>analizadas con IA</em></h2>
       <p>Monitoreo automático cada 6 horas. Resúmenes, señales de inversión y análisis de impacto generados por Claude.</p>
     </div>
 
-    <div class="stats-grid" id="stats">
-      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value default">—</div></div>
-      <div class="stat-card"><div class="stat-label">Alcistas</div><div class="stat-value green">—</div></div>
-      <div class="stat-card"><div class="stat-label">Bajistas</div><div class="stat-value red">—</div></div>
-      <div class="stat-card"><div class="stat-label">Alta relevancia</div><div class="stat-value accent">—</div></div>
+    <div class="stats-grid" id="stats" role="region" aria-label="Estadísticas">
+      <div class="stat-card s-default">
+        <div class="stat-label">Total noticias</div>
+        <div class="stat-value default">—</div>
+        <div class="stat-sub">&nbsp;</div>
+      </div>
+      <div class="stat-card s-green">
+        <div class="stat-label">Alcistas</div>
+        <div class="stat-value green">—</div>
+        <div class="stat-sub">&nbsp;</div>
+      </div>
+      <div class="stat-card s-red">
+        <div class="stat-label">Bajistas</div>
+        <div class="stat-value red">—</div>
+        <div class="stat-sub">&nbsp;</div>
+      </div>
+      <div class="stat-card s-accent">
+        <div class="stat-label">Alta relevancia</div>
+        <div class="stat-value accent">—</div>
+        <div class="stat-sub">&nbsp;</div>
+      </div>
     </div>
 
-    <div class="filters">
+    <div class="controls" role="search" aria-label="Buscar y ordenar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="search"
+          class="search-input"
+          id="search-input"
+          placeholder="Buscar noticias, tickers, sectores..."
+          oninput="aplicarFiltros()"
+          aria-label="Buscar noticias"
+        >
+      </div>
+      <div class="sort-wrap">
+        <select class="sort-select" id="sort-select" onchange="aplicarFiltros()" aria-label="Ordenar por">
+          <option value="newest">Más recientes</option>
+          <option value="oldest">Más antiguas</option>
+          <option value="confidence">Mayor confianza</option>
+          <option value="relevance">Alta relevancia primero</option>
+        </select>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filtrar por tipo">
       <span class="filters-label">FILTRAR:</span>
-      <button class="filter-btn active" onclick="filtrar('todos', this)">Todos</button>
-      <button class="filter-btn" onclick="filtrar('Alcista', this)">Alcista</button>
-      <button class="filter-btn" onclick="filtrar('Bajista', this)">Bajista</button>
-      <button class="filter-btn" onclick="filtrar('Neutro', this)">Neutro</button>
-      <button class="filter-btn" onclick="filtrar('Mixto', this)">Mixto</button>
-      <button class="filter-btn" onclick="filtrar('Alta', this)">Alta relevancia</button>
+      <button class="filter-btn active" onclick="setFiltro('todos', this)">
+        Todos <span class="filter-count" id="cnt-todos">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFiltro('Alcista', this)">
+        Alcista <span class="filter-count" id="cnt-alcista">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFiltro('Bajista', this)">
+        Bajista <span class="filter-count" id="cnt-bajista">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFiltro('Neutro', this)">
+        Neutro <span class="filter-count" id="cnt-neutro">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFiltro('Mixto', this)">
+        Mixto <span class="filter-count" id="cnt-mixto">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFiltro('Alta', this)">
+        Alta relevancia <span class="filter-count" id="cnt-alta">—</span>
+      </button>
+    </div>
+
+    <div class="results-header" id="results-header" style="display:none">
+      <span class="results-count" id="results-count" aria-live="polite"></span>
     </div>
 
     <div class="cards-list">
-      <div class="status-msg" id="status">
-        <div class="spinner"></div>
-        Cargando noticias...
-      </div>
+      <div id="status"></div>
       <div id="cards"></div>
     </div>
+
   </div>
 </main>
 
 <footer>
   <div class="container">
-    <p>FinanceIA Monitor · Proyecto Coderhouse · Automatizaciones con <span>IA</span> · n8n + Claude API</p>
+    <div class="footer-inner">
+      <p>FinanceIA Monitor · Proyecto Coderhouse · <span>n8n + Claude API</span></p>
+      <p>Actualización automática cada 6 horas</p>
+    </div>
   </div>
 </footer>
 
@@ -462,6 +970,7 @@ const SHEET_ID = '1Mpn7NhJaPQWvfvtah6zWQ9h4jfSG4rOmYdeQoZt_yA4';
 let allData = [];
 let filtroActivo = 'todos';
 
+// ── CSV ──
 function parseCSV(text) {
   const rows = [];
   const lines = text.trim().split('\n');
@@ -479,6 +988,27 @@ function parseCSV(text) {
   return rows;
 }
 
+// ── Helpers ──
+function parseConfianza(v) {
+  return parseInt((v || '').replace(/[^0-9]/g, '')) || 0;
+}
+
+function confClass(v) {
+  const n = parseConfianza(v);
+  if (n >= 75) return 'conf-high';
+  if (n >= 50) return 'conf-mid';
+  return 'conf-low';
+}
+
+function impactClass(v) {
+  if (!v) return 'impact-neutro';
+  const vl = v.toLowerCase();
+  if (vl.includes('alc')) return 'impact-alcista';
+  if (vl.includes('baj')) return 'impact-bajista';
+  if (vl.includes('mix')) return 'impact-mixto';
+  return 'impact-neutro';
+}
+
 function badgeImpacto(v) {
   if (!v) return '';
   const vl = v.toLowerCase();
@@ -488,13 +1018,17 @@ function badgeImpacto(v) {
 
 function badgeRelevancia(v) {
   if (!v) return '';
-  const vl = v.toLowerCase();
-  const cl = vl.includes('alt') ? 'alta' : vl.includes('baj') ? 'baja' : 'media';
+  const cl = v.toLowerCase().includes('alt') ? 'alta' : v.toLowerCase().includes('baj') ? 'baja' : 'media';
   return `<span class="badge badge-${cl}">Rel. ${v}</span>`;
 }
 
 function badgeSector(v) {
   return v ? `<span class="badge badge-sector">${v}</span>` : '';
+}
+
+function badgeConf(v) {
+  if (!v) return '';
+  return `<span class="badge-conf ${confClass(v)}">Conf. ${v}</span>`;
 }
 
 function renderTickers(v) {
@@ -519,60 +1053,183 @@ function formatFecha(v) {
   } catch(e) { return v; }
 }
 
+function textoBusqueda(r) {
+  return [(r[1]||''), (r[2]||''), (r[4]||''), (r[5]||'')].join(' ').toLowerCase();
+}
+
+// ── Toast ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── Scroll to top ──
+window.addEventListener('scroll', () => {
+  document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 320);
+}, { passive: true });
+
+// ── Stats ──
 function renderStats(data) {
+  const total = data.length;
   const alcistas = data.filter(r => (r[3]||'').includes('Alcista')).length;
   const bajistas = data.filter(r => (r[3]||'').includes('Bajista')).length;
   const altas = data.filter(r => (r[7]||'').includes('Alta')).length;
+  const pct = n => total > 0 ? Math.round(n / total * 100) + '% del total' : '—';
+
   document.getElementById('stats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Total noticias</div><div class="stat-value default">${data.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Alcistas</div><div class="stat-value green">${alcistas}</div></div>
-    <div class="stat-card"><div class="stat-label">Bajistas</div><div class="stat-value red">${bajistas}</div></div>
-    <div class="stat-card"><div class="stat-label">Alta relevancia</div><div class="stat-value accent">${altas}</div></div>
+    <div class="stat-card s-default">
+      <div class="stat-label">Total noticias</div>
+      <div class="stat-value default">${total}</div>
+      <div class="stat-sub">últimas 24h</div>
+    </div>
+    <div class="stat-card s-green">
+      <div class="stat-label">Alcistas</div>
+      <div class="stat-value green">${alcistas}</div>
+      <div class="stat-sub">${pct(alcistas)}</div>
+    </div>
+    <div class="stat-card s-red">
+      <div class="stat-label">Bajistas</div>
+      <div class="stat-value red">${bajistas}</div>
+      <div class="stat-sub">${pct(bajistas)}</div>
+    </div>
+    <div class="stat-card s-accent">
+      <div class="stat-label">Alta relevancia</div>
+      <div class="stat-value accent">${altas}</div>
+      <div class="stat-sub">${pct(altas)}</div>
+    </div>
   `;
 }
 
-function renderCards(data) {
-  const container = document.getElementById('cards');
-  if (!data.length) {
-    container.innerHTML = '<div class="status-msg">No hay noticias con ese filtro.</div>';
-    return;
-  }
-  container.innerHTML = data.map(r => `
-    <div class="news-card">
-      <div class="card-top">
-        <div class="card-title">${r[1] || 'Sin título'}</div>
-        <div class="card-fecha">${formatFecha(r[0])}</div>
-      </div>
-      <div class="card-resumen">${r[2] || ''}</div>
-      <div class="card-badges">
-        ${badgeImpacto(r[3])}
-        ${badgeSector(r[5])}
-        ${badgeRelevancia(r[7])}
-        ${r[6] ? `<span style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">${r[6]}</span>` : ''}
-      </div>
-      ${r[4] ? `<div class="card-tickers">${renderTickers(r[4])}</div>` : ''}
-      ${r[8] ? `<div class="card-senal"><div class="senal-dot" style="background:${senalColor(r[8])}"></div><span>Señal: <strong>${r[8]}</strong></span></div>` : ''}
-    </div>
-  `).join('');
+// ── Filter counts ──
+function updateCounts(data) {
+  document.getElementById('cnt-todos').textContent = data.length;
+  document.getElementById('cnt-alcista').textContent = data.filter(r => (r[3]||'').includes('Alcista')).length;
+  document.getElementById('cnt-bajista').textContent = data.filter(r => (r[3]||'').includes('Bajista')).length;
+  document.getElementById('cnt-neutro').textContent = data.filter(r => (r[3]||'').includes('Neutro')).length;
+  document.getElementById('cnt-mixto').textContent = data.filter(r => (r[3]||'').includes('Mixto')).length;
+  document.getElementById('cnt-alta').textContent = data.filter(r => (r[7]||'').includes('Alta')).length;
 }
 
-function filtrar(tipo, btn) {
+// ── Render cards ──
+function renderCards(data) {
+  const container = document.getElementById('cards');
+  const resHeader = document.getElementById('results-header');
+  const resCount = document.getElementById('results-count');
+
+  resHeader.style.display = 'flex';
+  const extra = data.length !== allData.length ? ` de ${allData.length}` : '';
+  resCount.innerHTML = `<strong>${data.length}</strong> noticias${extra}`;
+
+  if (!data.length) {
+    container.innerHTML = `
+      <div class="status-msg">
+        <svg class="st-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        No hay noticias con ese filtro.
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = data.map((r, i) => {
+    const resumen = r[2] || '';
+    const isLong = resumen.length > 220;
+    return `
+      <div class="news-card ${impactClass(r[3])}" style="animation-delay:${Math.min(i * 28, 280)}ms">
+        <div class="card-top">
+          <div class="card-title">${r[1] || 'Sin título'}</div>
+          ${r[0] ? `<div class="card-fecha">${formatFecha(r[0])}</div>` : ''}
+        </div>
+        <div class="card-resumen${isLong ? ' collapsed' : ''}" id="res-${i}">${resumen}</div>
+        ${isLong ? `<button class="btn-expand" onclick="toggleExpand(${i},this)" data-expanded="false">Ver más ↓</button>` : ''}
+        <div class="card-badges">
+          ${badgeImpacto(r[3])}
+          ${badgeSector(r[5])}
+          ${badgeRelevancia(r[7])}
+          ${badgeConf(r[6])}
+        </div>
+        ${r[4] ? `<div class="card-tickers">${renderTickers(r[4])}</div>` : ''}
+        ${r[8] ? `
+          <div class="card-senal">
+            <div class="senal-dot" style="background:${senalColor(r[8])}"></div>
+            <span>Señal: <strong>${r[8]}</strong></span>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function toggleExpand(i, btn) {
+  const el = document.getElementById(`res-${i}`);
+  const expanded = btn.dataset.expanded === 'true';
+  el.classList.toggle('collapsed', expanded);
+  btn.textContent = expanded ? 'Ver más ↓' : 'Ver menos ↑';
+  btn.dataset.expanded = expanded ? 'false' : 'true';
+}
+
+// ── Sort ──
+function sortData(data, method) {
+  const copy = [...data];
+  if (method === 'oldest') return copy.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+  if (method === 'confidence') return copy.sort((a, b) => parseConfianza(b[6]) - parseConfianza(a[6]));
+  if (method === 'relevance') {
+    const rv = { 'Alta': 3, 'Media': 2, 'Baja': 1 };
+    return copy.sort((a, b) => (rv[b[7]] || 0) - (rv[a[7]] || 0));
+  }
+  return copy.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+}
+
+// ── Filter ──
+function setFiltro(tipo, btn) {
   filtroActivo = tipo;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  let filtered = allData;
-  if (tipo === 'Alcista') filtered = allData.filter(r => (r[3]||'').includes('Alcista'));
-  else if (tipo === 'Bajista') filtered = allData.filter(r => (r[3]||'').includes('Bajista'));
-  else if (tipo === 'Neutro') filtered = allData.filter(r => (r[3]||'').includes('Neutro'));
-  else if (tipo === 'Mixto') filtered = allData.filter(r => (r[3]||'').includes('Mixto'));
-  else if (tipo === 'Alta') filtered = allData.filter(r => (r[7]||'').includes('Alta'));
-  renderCards(filtered);
+  aplicarFiltros();
 }
 
+function aplicarFiltros() {
+  const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+  const sortMethod = document.getElementById('sort-select')?.value || 'newest';
+
+  let filtered = allData;
+
+  if (filtroActivo === 'Alcista') filtered = filtered.filter(r => (r[3]||'').includes('Alcista'));
+  else if (filtroActivo === 'Bajista') filtered = filtered.filter(r => (r[3]||'').includes('Bajista'));
+  else if (filtroActivo === 'Neutro') filtered = filtered.filter(r => (r[3]||'').includes('Neutro'));
+  else if (filtroActivo === 'Mixto') filtered = filtered.filter(r => (r[3]||'').includes('Mixto'));
+  else if (filtroActivo === 'Alta') filtered = filtered.filter(r => (r[7]||'').includes('Alta'));
+
+  if (query) filtered = filtered.filter(r => textoBusqueda(r).includes(query));
+
+  renderCards(sortData(filtered, sortMethod));
+}
+
+// ── Skeleton ──
+function showSkeleton() {
+  document.getElementById('results-header').style.display = 'none';
+  document.getElementById('cards').innerHTML = Array(5).fill(0).map(() => `
+    <div class="skeleton-card">
+      <div class="sk-row">
+        <div class="skeleton sk-title"></div>
+        <div class="skeleton sk-date"></div>
+      </div>
+      <div class="skeleton sk-line"></div>
+      <div class="skeleton sk-line"></div>
+      <div class="skeleton sk-line"></div>
+      <div class="skeleton sk-badges"></div>
+    </div>`).join('');
+}
+
+// ── Load ──
 async function cargar() {
-  document.getElementById('status').style.display = 'block';
-  document.getElementById('status').innerHTML = '<div class="spinner"></div>Cargando noticias...';
-  document.getElementById('cards').innerHTML = '';
+  const btn = document.getElementById('btn-refresh');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  showSkeleton();
+
   try {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Hoja1`;
     const res = await fetch(url);
@@ -580,12 +1237,34 @@ async function cargar() {
     const text = await res.text();
     const rows = parseCSV(text);
     allData = rows.slice(1).filter(r => r[1] && r[1].length > 2);
-    document.getElementById('status').style.display = 'none';
-    document.getElementById('last-update').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'});
+
+    document.getElementById('last-update').textContent =
+      'Act. ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+
     renderStats(allData);
-    filtrar(filtroActivo, null);
+    updateCounts(allData);
+    aplicarFiltros();
+    showToast(`${allData.length} noticias cargadas`);
   } catch(e) {
-    document.getElementById('status').innerHTML = `<div style="color:#f05c5c;">Error al cargar datos.<br><small>${e.message}</small></div>`;
+    document.getElementById('cards').innerHTML = `
+      <div class="error-box">
+        <svg class="err-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <circle cx="12" cy="16" r="0.5" fill="currentColor"/>
+        </svg>
+        Error al cargar datos.<br>
+        <small style="opacity:0.65;display:block;margin-top:6px">${e.message}</small>
+        <button class="btn-retry" onclick="cargar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+          </svg>
+          Reintentar
+        </button>
+      </div>`;
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
   }
 }
 
