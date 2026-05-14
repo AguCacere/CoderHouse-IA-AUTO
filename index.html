@@ -347,136 +347,81 @@
   .news-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(22,22,22,0.8); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
   .news-card.expanded { border-color: rgba(124,106,247,0.35); box-shadow: 0 8px 40px rgba(124,106,247,0.1); }
 
-  /* Card header */
-  .card-header { padding: 20px 20px 18px 23px; }
-  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
-
-  .card-title {
-    font-family: 'Syne', sans-serif; font-size: 15.5px; font-weight: 700;
-    color: var(--text); line-height: 1.38; flex: 1; letter-spacing: -0.1px;
+  /* ── Card layout ── */
+  .card-top-row {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 16px 18px 0 21px; gap: 14px;
   }
-
-  .card-fecha {
+  .card-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .impact-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    padding: 3px 9px; border-radius: 100px; letter-spacing: 0.2px; flex-shrink: 0;
+  }
+  .impact-pill svg { width: 9px; height: 9px; flex-shrink: 0; }
+  .impact-pill.alcista { color: var(--green); background: var(--green-bg); border: 1px solid rgba(61,220,144,0.25); }
+  .impact-pill.bajista { color: var(--red); background: var(--red-bg); border: 1px solid rgba(255,95,95,0.25); }
+  .impact-pill.mixto { color: var(--amber); background: var(--amber-bg); border: 1px solid rgba(245,173,69,0.25); }
+  .impact-pill.neutro { color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+  .meta-dot { color: rgba(255,255,255,0.2); font-size: 10px; user-select:none; }
+  .meta-sector { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+  .meta-horizonte {
     font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
-    white-space: nowrap; background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px; flex-shrink: 0;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    padding: 2px 7px; border-radius: 4px;
   }
-
-  .card-preview {
-    font-size: 13.5px; color: #b0b0b0; line-height: 1.7; margin-bottom: 12px;
-    max-height: 300px; overflow: hidden;
-    transition: opacity 0.2s ease, max-height 0.3s ease, margin-bottom 0.3s ease;
+  .card-fecha { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.28); }
+  .card-ticker-block { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; min-width: 90px; }
+  .ticker-symbol { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--muted); letter-spacing: 0.6px; text-align: right; text-transform: uppercase; }
+  .ticker-price { font-family: 'DM Mono', monospace; font-size: 21px; font-weight: 500; color: var(--text); line-height: 1.15; text-align: right; letter-spacing: -0.5px; }
+  .ticker-change { font-family: 'DM Mono', monospace; font-size: 11px; text-align: right; }
+  .ticker-change.pos { color: var(--green); }
+  .ticker-change.neg { color: var(--red); }
+  .ticker-change.neutral { color: var(--muted); }
+  .sparkline { display: block; margin-top: 5px; overflow: visible; }
+  .card-title-area { padding: 10px 18px 0 21px; }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 15.5px; font-weight: 700; color: var(--text); line-height: 1.42; letter-spacing: -0.1px; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 14px 21px; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .footer-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .signal-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    padding: 3px 10px; border-radius: 100px; letter-spacing: 0.2px;
   }
-
-  .news-card.expanded .card-preview { opacity: 0; max-height: 0; margin-bottom: 0; }
-
-  .card-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-
-  /* Chevron */
-  .card-chevron {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 9px 24px; border-top: 1px solid var(--border);
-    color: var(--muted); font-family: 'DM Mono', monospace;
-    font-size: 11px; letter-spacing: 0.3px;
-    transition: color 0.2s, border-top-color 0.2s; user-select: none;
+  .signal-pill::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; flex-shrink:0; }
+  .signal-pill.sig-compra { color: var(--green); background: var(--green-bg); border: 1px solid rgba(61,220,144,0.25); }
+  .signal-pill.sig-venta { color: var(--red); background: var(--red-bg); border: 1px solid rgba(255,95,95,0.25); }
+  .signal-pill.sig-mantener { color: var(--blue); background: var(--blue-bg); border: 1px solid rgba(96,176,255,0.25); }
+  .signal-pill.sig-observar { color: var(--amber); background: var(--amber-bg); border: 1px solid rgba(245,173,69,0.25); }
+  .signal-pill.sig-default { color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+  .horizonte-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+  .expand-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent2);
+    background: none; border: none; cursor: pointer; padding: 0; letter-spacing: 0.3px;
+    transition: color 0.15s; pointer-events: none;
   }
-
-  .card-chevron svg { width: 13px; height: 13px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
-  .news-card:hover .card-chevron { color: var(--accent2); }
-  .news-card.expanded .card-chevron { color: var(--accent2); border-top-color: rgba(124,106,247,0.2); }
-  .news-card.expanded .card-chevron svg { transform: rotate(180deg); }
+  .expand-btn svg { width: 12px; height: 12px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
+  .news-card.expanded .expand-btn svg { transform: rotate(180deg); }
 
   /* Animated expand */
-  .card-expand-wrap {
-    display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows 0.38s cubic-bezier(0.4,0,0.2,1);
-  }
+  .card-expand-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.38s cubic-bezier(0.4,0,0.2,1); }
   .news-card.expanded .card-expand-wrap { grid-template-rows: 1fr; }
-
-  .card-body {
-    min-height: 0; overflow: hidden;
-    padding: 22px 20px 22px 23px;
-    border-top: 1px solid var(--border);
-    background: rgba(0,0,0,0.4);
-  }
-
-  /* Card body internals */
-  .cb-section { margin-bottom: 20px; }
+  .card-body { min-height: 0; overflow: hidden; padding: 18px 18px 20px 21px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.35); }
+  .cb-section { margin-bottom: 18px; }
   .cb-section:last-child { margin-bottom: 0; }
-
-  .cb-label {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    letter-spacing: 0.8px; text-transform: uppercase; color: #777; margin-bottom: 8px;
-  }
-
+  .cb-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; color: #666; margin-bottom: 8px; }
   .cb-text { font-size: 14px; color: #cccccc; line-height: 1.78; font-weight: 400; }
-
-  /* Detail grid */
-  .card-detail-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  }
-
-  .cdg-item {
-    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 14px; transition: border-color 0.15s;
-  }
-  .cdg-item:hover { border-color: var(--border2); }
-  .cdg-val { margin-top: 5px; font-size: 13px; color: var(--text); }
-
-  /* Precio/Cotización */
-  .cotiz-row {
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  }
-
-  .cotiz-ticker {
-    font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500;
-    color: var(--accent2); background: rgba(124,106,247,0.1);
-    border: 1px solid rgba(124,106,247,0.2); padding: 3px 10px; border-radius: 6px;
-  }
-
-  .cotiz-precio {
-    font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500;
-  }
-
-  /* Signal */
-  .signal-box {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 16px; border-radius: 10px; border: 1px solid;
-  }
-
-  .signal-box.sig-compra { background: rgba(61,220,144,0.07); border-color: rgba(61,220,144,0.25); }
-  .signal-box.sig-venta { background: rgba(255,95,95,0.07); border-color: rgba(255,95,95,0.25); }
-  .signal-box.sig-mantener { background: rgba(96,176,255,0.07); border-color: rgba(96,176,255,0.25); }
-  .signal-box.sig-observar { background: rgba(245,173,69,0.07); border-color: rgba(245,173,69,0.25); }
-  .signal-box.sig-default { background: rgba(144,144,144,0.07); border-color: rgba(144,144,144,0.2); }
-
-  .signal-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-  .signal-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); }
-  .signal-value { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
-
-  .sig-compra .signal-value { color: var(--green); }
-  .sig-venta .signal-value { color: var(--red); }
-  .sig-mantener .signal-value { color: var(--blue); }
-  .sig-observar .signal-value { color: var(--amber); }
-  .sig-default .signal-value { color: var(--muted); }
-
-  /* Tickers */
   .cb-tickers { display: flex; flex-wrap: wrap; gap: 4px; }
-
-  .ticker {
-    font-family: 'DM Mono', monospace; font-size: 11px;
-    background: rgba(124,106,247,0.08); border: 1px solid rgba(124,106,247,0.2);
-    color: var(--accent2); padding: 3px 9px; border-radius: 4px;
-    cursor: default; transition: all 0.15s; display: inline-block;
-  }
+  .ticker { font-family: 'DM Mono', monospace; font-size: 11px; background: rgba(124,106,247,0.08); border: 1px solid rgba(124,106,247,0.2); color: var(--accent2); padding: 3px 9px; border-radius: 4px; cursor: default; transition: all 0.15s; display: inline-block; }
   .ticker:hover { background: rgba(124,106,247,0.16); border-color: rgba(124,106,247,0.38); }
-
-  /* ── Badges ── */
-  .badge {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    padding: 3px 8px; border-radius: 4px; letter-spacing: 0.3px; font-weight: 500;
-  }
-
+  .recom-control { display: flex; gap: 6px; flex-wrap: wrap; }
+  .recom-btn { display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2px; padding: 7px 14px; border-radius: 8px; cursor: default; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: rgba(255,255,255,0.3); transition: all 0.15s; }
+  .recom-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .recom-btn.active.recom-red { color: var(--red); background: rgba(255,95,95,0.08); border-color: rgba(255,95,95,0.3); }
+  .recom-btn.active.recom-amber { color: var(--amber); background: rgba(245,173,69,0.08); border-color: rgba(245,173,69,0.3); }
+  .recom-btn.active.recom-green { color: var(--green); background: rgba(61,220,144,0.08); border-color: rgba(61,220,144,0.3); }
+  .badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.3px; font-weight: 500; }
   .badge-alcista { background: var(--green-bg); color: var(--green); border: 1px solid rgba(61,220,144,0.25); }
   .badge-bajista { background: var(--red-bg); color: var(--red); border: 1px solid rgba(255,95,95,0.25); }
   .badge-neutro { background: rgba(144,144,144,0.08); color: var(--muted); border: 1px solid rgba(144,144,144,0.2); }
@@ -485,12 +430,7 @@
   .badge-alta { background: var(--red-bg); color: var(--red); border: 1px solid rgba(255,95,95,0.2); }
   .badge-media { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,173,69,0.2); }
   .badge-baja { background: var(--green-bg); color: var(--green); border: 1px solid rgba(61,220,144,0.2); }
-
-  .badge-horizonte {
-    font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 8px;
-    border-radius: 4px; font-weight: 500;
-    background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border);
-  }
+  .badge-horizonte { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 500; background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
 
   /* ── Skeleton ── */
   .skeleton-card { background: rgba(13,13,13,0.7); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 10px; }
@@ -578,10 +518,10 @@
     .header-right .last-update { display: none; }
     .hero { padding: 40px 0 28px; }
     .hero h2 { font-size: 28px; }
-    .card-header { padding: 16px 16px 14px 18px; }
-    .card-body { padding: 18px 16px 18px 18px; }
-    .card-top { flex-direction: column; gap: 6px; }
-    .card-fecha { align-self: flex-start; }
+    .card-top-row { padding: 14px 14px 0 16px; }
+    .card-title-area { padding: 8px 14px 0 16px; }
+    .card-footer { padding: 10px 14px 12px 16px; }
+    .card-body { padding: 16px 14px 18px 16px; }
     .stat-value { font-size: 28px; }
     .card-detail-grid { grid-template-columns: 1fr; }
     .controls { flex-direction: column; align-items: stretch; }
@@ -854,13 +794,55 @@ window.addEventListener('scroll', () => {
   document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 320);
 }, { passive: true });
 
+// ── Card helpers ──
+function sparklineSVG(seed, signal) {
+  let s = (seed * 1664525 + 1013904223) >>> 0;
+  const rng = () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967295; };
+  const vl = (signal||'').toLowerCase();
+  const isPos = vl.includes('compra');
+  const isNeg = vl.includes('venta');
+  const w = 80, h = 28;
+  let y = h * (isPos ? 0.65 : isNeg ? 0.35 : 0.5);
+  const pts = [];
+  for (let i = 0; i <= 12; i++) {
+    const trend = isPos ? -0.55 : isNeg ? 0.55 : 0;
+    y = Math.max(3, Math.min(h - 3, y + trend + (rng() - 0.5) * 5));
+    pts.push(`${i === 0 ? 'M' : 'L'}${(i * w / 12).toFixed(1)},${y.toFixed(1)}`);
+  }
+  const color = isPos ? '#3ddc90' : isNeg ? '#ff6060' : '#60b0ff';
+  return `<svg class="sparkline" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function impactPill(v) {
+  if (!v) return '';
+  const vl = v.toLowerCase();
+  const cl = vl.includes('alc') ? 'alcista' : vl.includes('baj') ? 'bajista' : vl.includes('mix') ? 'mixto' : 'neutro';
+  const icons = {
+    alcista: '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2,8 5,2 8,8"/></svg>',
+    bajista: '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2,2 5,8 8,2"/></svg>',
+    mixto: '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="5" x2="9" y2="5"/><polyline points="6,2 9,5 6,8"/></svg>',
+    neutro: '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="5" x2="9" y2="5"/></svg>',
+  };
+  return `<span class="impact-pill ${cl}">${icons[cl]}${v}</span>`;
+}
+
+function recomControl(senal) {
+  const vl = (senal||'').toLowerCase();
+  const active = vl.includes('compra') ? 'entrar' : vl.includes('venta') ? 'precaucion' : 'observar';
+  return `<div class="recom-control">
+    <button class="recom-btn recom-red${active==='precaucion'?' active':''}" tabindex="-1"><span class="recom-dot"></span>Precaución</button>
+    <button class="recom-btn recom-amber${active==='observar'?' active':''}" tabindex="-1"><span class="recom-dot"></span>Observar</button>
+    <button class="recom-btn recom-green${active==='entrar'?' active':''}" tabindex="-1"><span class="recom-dot"></span>Entrar</button>
+  </div>`;
+}
+
 // ── Card toggle ──
 function toggleCard(el) {
   el.classList.toggle('expanded');
   const expanded = el.classList.contains('expanded');
   el.setAttribute('aria-expanded', expanded);
-  const label = el.querySelector('.chevron-label');
-  if (label) label.textContent = expanded ? 'Cerrar análisis' : 'Ver análisis completo';
+  const label = el.querySelector('.expand-label');
+  if (label) label.textContent = expanded ? 'Cerrar análisis' : 'Análisis completo';
 }
 
 // ── Stats ──
@@ -921,69 +903,60 @@ function renderCards(data) {
   }
 
   container.innerHTML = data.map((r, i) => {
-    const preview = (r[2]||'').substring(0, 145) + ((r[2]||'').length > 145 ? '…' : '');
-    const sc = senalClass(r[8]);
-    const hasCotiz = r[9] || r[10];
+    const priceStr = r[10] || '';
+    const hasChange = priceStr.includes('+') || priceStr.includes('-');
+    const changeClass = priceStr.includes('+') ? 'pos' : priceStr.includes('-') ? 'neg' : 'neutral';
 
     return `
       <div class="news-card ${impactClass(r[3])}" onclick="toggleCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard(this);}" tabindex="0" role="button" aria-expanded="false" style="animation-delay:${Math.min(i*25,260)}ms">
-        <div class="card-header">
-          <div class="card-top">
-            <div class="card-title">${r[1]||'Sin título'}</div>
-            ${r[0] ? `<div class="card-fecha">${formatFecha(r[0])}</div>` : ''}
+
+        <div class="card-top-row">
+          <div class="card-meta">
+            ${impactPill(r[3])}
+            ${r[5] ? `<span class="meta-dot">·</span><span class="meta-sector">${r[5]}</span>` : ''}
+            ${r[6] ? `<span class="meta-dot">·</span><span class="meta-horizonte">${r[6]}</span>` : ''}
+            ${r[0] ? `<span class="meta-dot">·</span><span class="card-fecha">${formatFecha(r[0])}</span>` : ''}
           </div>
-          <div class="card-preview">${preview}</div>
-          <div class="card-badges">
-            ${badgeImpacto(r[3])} ${badgeSector(r[5])} ${badgeRelevancia(r[7])} ${badgeHorizonte(r[6])}
-          </div>
+          ${r[9] || r[10] ? `
+          <div class="card-ticker-block">
+            ${r[9] ? `<div class="ticker-symbol">${r[9]}</div>` : ''}
+            ${priceStr ? `<div class="ticker-price">${priceStr}</div>` : ''}
+            ${sparklineSVG(i, r[8])}
+          </div>` : ''}
         </div>
 
-        <div class="card-chevron">
-          <span class="chevron-label">Ver análisis completo</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="card-title-area">
+          <div class="card-title">${r[1]||'Sin título'}</div>
+        </div>
+
+        <div class="card-footer">
+          <div class="footer-left">
+            ${r[8] ? `<span class="signal-pill ${senalClass(r[8])}">${r[8]}</span>` : ''}
+            ${r[6] ? `<span class="horizonte-label">${r[6]}</span>` : ''}
+          </div>
+          <button class="expand-btn" tabindex="-1" aria-hidden="true">
+            <span class="expand-label">Análisis completo</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
         </div>
 
         <div class="card-expand-wrap"><div class="card-body">
 
           <div class="cb-section">
-            <div class="cb-label">Resumen ejecutivo</div>
+            <div class="cb-label">Resumen</div>
             <div class="cb-text">${r[2]||'—'}</div>
           </div>
 
-          <div class="cb-section">
-            <div class="card-detail-grid">
-              <div class="cdg-item"><div class="cb-label">Impacto de mercado</div><div class="cdg-val">${badgeImpacto(r[3])||'—'}</div></div>
-              <div class="cdg-item"><div class="cb-label">Sector</div><div class="cdg-val">${badgeSector(r[5])||'—'}</div></div>
-              <div class="cdg-item"><div class="cb-label">Horizonte</div><div class="cdg-val">${badgeHorizonte(r[6])||'—'}</div></div>
-              <div class="cdg-item"><div class="cb-label">Relevancia</div><div class="cdg-val">${badgeRelevancia(r[7])||'—'}</div></div>
-            </div>
-          </div>
-
-          ${hasCotiz ? `
-          <div class="cb-section">
-            <div class="cb-label">Cotización</div>
-            <div class="cotiz-row">
-              ${r[9] ? `<span class="cotiz-ticker">${r[9]}</span>` : ''}
-              ${r[10] ? `<span class="cotiz-precio" style="color:${precioColor(r[10])}">${r[10]}</span>` : ''}
-            </div>
-          </div>` : ''}
-
           ${r[4] ? `
           <div class="cb-section">
-            <div class="cb-label">Activos afectados</div>
+            <div class="cb-label">Activos</div>
             <div class="cb-tickers">${renderTickers(r[4])}</div>
           </div>` : ''}
 
           ${r[8] ? `
           <div class="cb-section">
-            <div class="cb-label">Señal de inversión</div>
-            <div class="signal-box ${sc}">
-              <div class="signal-dot" style="background:${senalDotColor(r[8])}"></div>
-              <div>
-                <div class="signal-label">Señal</div>
-                <div class="signal-value">${r[8]}</div>
-              </div>
-            </div>
+            <div class="cb-label">Recomendación</div>
+            ${recomControl(r[8])}
           </div>` : ''}
 
         </div></div>
