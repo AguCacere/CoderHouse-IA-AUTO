@@ -19,7 +19,6 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -157,6 +156,8 @@
   .hero h2 {
     font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 700;
     line-height: 1.08; letter-spacing: -2px; margin-bottom: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #e8e2ff 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
 
   .hero h2 em {
@@ -228,35 +229,18 @@
 
   .spy-meta { display: flex; align-items: center; gap: 12px; }
 
-  .spy-price {
-    font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; color: var(--text);
-  }
-
-  .spy-change {
-    font-family: 'DM Mono', monospace; font-size: 13px;
-    padding: 3px 10px; border-radius: 6px;
-  }
-
-  .spy-change.pos { color: var(--green); background: var(--green-bg); border: 1px solid rgba(61,220,144,0.2); }
-  .spy-change.neg { color: var(--red); background: var(--red-bg); border: 1px solid rgba(255,95,95,0.2); }
-  .spy-change.neutral { color: var(--muted); background: rgba(255,255,255,0.05); border: 1px solid var(--border); }
 
   .spy-chart-wrap {
-    position: relative; height: 160px;
+    position: relative; height: 220px;
     background: rgba(13,13,13,0.6); border: 1px solid var(--border);
     border-radius: 12px; overflow: hidden;
   }
 
-  .spy-chart-wrap canvas { display: block; }
-
-  .spy-unavail {
-    display: flex; align-items: center; justify-content: center;
-    height: 100%; color: var(--muted);
-    font-family: 'DM Mono', monospace; font-size: 12px;
-    flex-direction: column; gap: 8px;
+  .spy-tv-badge {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--muted); background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px;
   }
-
-  .spy-unavail svg { width: 28px; height: 28px; opacity: 0.3; }
 
   /* ── Controls ── */
   .controls {
@@ -665,12 +649,29 @@
           <span class="spy-ticker-badge">SPY · 1Y</span>
         </div>
         <div class="spy-meta">
-          <span class="spy-price" id="spy-price"></span>
-          <span class="spy-change neutral" id="spy-change">Cargando…</span>
+          <span class="spy-tv-badge">TradingView</span>
         </div>
       </div>
-      <div class="spy-chart-wrap" id="spy-chart-wrap">
-        <canvas id="spy-canvas"></canvas>
+      <div class="spy-chart-wrap">
+        <div class="tradingview-widget-container" style="height:100%;width:100%">
+          <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "AMEX:SPY",
+            "width": "100%",
+            "height": "100%",
+            "locale": "es",
+            "dateRange": "12M",
+            "colorTheme": "dark",
+            "trendLineColor": "rgba(124,106,247,1)",
+            "underLineColor": "rgba(124,106,247,0.12)",
+            "underLineBottomColor": "rgba(0,0,0,0)",
+            "isTransparent": true,
+            "autosize": false,
+            "largeChartUrl": ""
+          }
+          </script>
+        </div>
       </div>
     </div>
 
@@ -1048,132 +1049,6 @@ function showSkeleton() {
     </div>`).join('');
 }
 
-// ── SPY Chart ──
-let spyChart = null;
-
-async function cargarSPY() {
-  const wrap = document.getElementById('spy-chart-wrap');
-  const changeEl = document.getElementById('spy-change');
-  const priceEl = document.getElementById('spy-price');
-
-  try {
-    const yfUrl = 'https://query2.finance.yahoo.com/v8/finance/chart/SPY?range=1y&interval=1wk&includePrePost=false&corsDomain=finance.yahoo.com';
-    const proxies = [
-      `https://corsproxy.io/?${encodeURIComponent(yfUrl)}`,
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(yfUrl)}`,
-      `https://thingproxy.freeboard.io/fetch/${yfUrl}`,
-    ];
-    function fetchWithTimeout(url, ms) {
-      const ctrl = new AbortController();
-      const tid = setTimeout(() => ctrl.abort(), ms);
-      return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
-    }
-    let json = null;
-    for (const proxyUrl of proxies) {
-      try {
-        const res = await fetchWithTimeout(proxyUrl, 7000);
-        if (!res.ok) continue;
-        const text = await res.text();
-        const parsed = JSON.parse(text);
-        if (parsed?.chart?.result?.[0]) { json = parsed; break; }
-      } catch { continue; }
-    }
-    if (!json) throw new Error('no proxy');
-    const result = json.chart.result[0];
-    const timestamps = result.timestamp.map(t => new Date(t * 1000));
-    const closes = result.indicators.quote[0].close.map(v => v ? +v.toFixed(2) : null);
-
-    // Fill null gaps
-    for (let i = 1; i < closes.length; i++) if (closes[i] === null) closes[i] = closes[i-1];
-
-    const first = closes.find(v => v !== null);
-    const last = closes[closes.length - 1];
-    const chg = last && first ? ((last - first) / first * 100) : null;
-
-    if (last) {
-      priceEl.textContent = `$${last.toFixed(2)}`;
-    }
-
-    if (chg !== null) {
-      const isPos = chg >= 0;
-      changeEl.textContent = `${isPos ? '+' : ''}${chg.toFixed(2)}% 1Y`;
-      changeEl.className = `spy-change ${isPos ? 'pos' : 'neg'}`;
-    }
-
-    const labels = timestamps.map(d => d.toLocaleDateString('es-AR', { month: 'short', day: 'numeric' }));
-
-    const canvas = document.getElementById('spy-canvas');
-    const ctx = canvas.getContext('2d');
-
-    const grad = ctx.createLinearGradient(0, 0, 0, 160);
-    grad.addColorStop(0, 'rgba(124,106,247,0.25)');
-    grad.addColorStop(1, 'rgba(124,106,247,0)');
-
-    if (spyChart) spyChart.destroy();
-    spyChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          data: closes,
-          borderColor: '#7c6af7',
-          borderWidth: 2,
-          backgroundColor: grad,
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          pointHoverBackgroundColor: '#b3a8ff',
-          tension: 0.3,
-          fill: true,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 800, easing: 'easeOutQuart' },
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(22,22,22,0.95)',
-            borderColor: 'rgba(124,106,247,0.3)',
-            borderWidth: 1,
-            titleColor: '#909090',
-            bodyColor: '#ffffff',
-            bodyFont: { family: 'DM Mono', size: 13 },
-            titleFont: { family: 'DM Mono', size: 10 },
-            padding: 10,
-            callbacks: { label: ctx => ` $${ctx.parsed.y.toFixed(2)}` }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(255,255,255,0.04)', drawTicks: false },
-            ticks: { color: '#606060', font: { family: 'DM Mono', size: 9 }, maxTicksLimit: 8, maxRotation: 0 },
-            border: { display: false }
-          },
-          y: {
-            position: 'right',
-            grid: { color: 'rgba(255,255,255,0.04)', drawTicks: false },
-            ticks: { color: '#606060', font: { family: 'DM Mono', size: 9 }, maxTicksLimit: 5, callback: v => `$${v}` },
-            border: { display: false }
-          }
-        }
-      }
-    });
-
-  } catch(e) {
-    changeEl.textContent = 'No disponible';
-    changeEl.className = 'spy-change neutral';
-    wrap.innerHTML = `
-      <div class="spy-unavail">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-        </svg>
-        Gráfico SPY no disponible
-      </div>`;
-  }
-}
-
 // ── Load ──
 async function cargar() {
   const btn = document.getElementById('btn-refresh');
@@ -1213,7 +1088,6 @@ async function cargar() {
 }
 
 cargar();
-cargarSPY();
 </script>
 </body>
 </html>
