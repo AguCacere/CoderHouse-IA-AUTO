@@ -168,36 +168,31 @@
 
   .hero p { color: #aaaaaa; font-size: 15px; max-width: 500px; line-height: 1.75; }
 
-  /* ── Stats ── */
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(4,1fr);
-    gap: 12px; padding: 28px 0; border-bottom: 1px solid var(--border);
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: flex; align-items: stretch;
+    padding: 24px 0; border-bottom: 1px solid var(--border);
   }
 
-  .stat-card {
-    background: rgba(13,13,13,0.75);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px; padding: 20px 22px;
-    transition: all 0.25s; position: relative; overflow: hidden;
+  .stat-item {
+    flex: 1; padding: 0 28px; position: relative;
+  }
+  .stat-item:first-child { padding-left: 0; }
+  .stat-item:last-child { padding-right: 0; }
+  .stat-item + .stat-item::before {
+    content: ''; position: absolute; left: 0; top: 10%; bottom: 10%;
+    width: 1px; background: rgba(255,255,255,0.07);
   }
 
-  .stat-card::after {
-    content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 2px; border-radius: 14px 14px 0 0; opacity: 0; transition: opacity 0.25s;
+  .stat-label {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.8px; text-transform: uppercase; color: #555; margin-bottom: 8px;
   }
-
-  .stat-card.s-default::after { background: var(--accent); }
-  .stat-card.s-green::after { background: var(--green); }
-  .stat-card.s-red::after { background: var(--red); }
-  .stat-card.s-accent::after { background: var(--accent2); }
-
-  .stat-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
-  .stat-card:hover::after { opacity: 1; }
-
-  .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; color: #777; margin-bottom: 12px; }
-  .stat-value { font-family: 'Syne', sans-serif; font-size: 34px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
-  .stat-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); min-height: 14px; }
+  .stat-value {
+    font-family: 'Syne', sans-serif; font-size: 38px; font-weight: 700;
+    line-height: 1; margin-bottom: 5px; letter-spacing: -1px;
+  }
+  .stat-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: #555; min-height: 14px; }
 
   .stat-value.green { color: var(--green); }
   .stat-value.red { color: var(--red); }
@@ -507,7 +502,9 @@
 
   /* ── Responsive ── */
   @media (max-width: 768px) {
-    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .stats-bar { flex-wrap: wrap; }
+    .stat-item { flex: 1 1 40%; min-width: 120px; padding: 12px 0; }
+    .stat-item + .stat-item::before { display: none; }
     .hero h2 { font-size: 34px; letter-spacing: -1px; }
     .sort-wrap, .date-toggle { flex: 1; }
     .sort-select { width: 100%; }
@@ -522,7 +519,7 @@
     .card-title-area { padding: 8px 14px 0 16px; }
     .card-footer { padding: 10px 14px 12px 16px; }
     .card-body { padding: 16px 14px 18px 16px; }
-    .stat-value { font-size: 28px; }
+    .stat-value { font-size: 30px; letter-spacing: -0.5px; }
     .card-detail-grid { grid-template-columns: 1fr; }
     .controls { flex-direction: column; align-items: stretch; }
     .sort-wrap, .date-toggle { flex: unset; }
@@ -574,11 +571,11 @@
       <p>Monitoreo automático cada 6 horas. Resúmenes, señales de inversión y análisis de impacto generados por Claude.</p>
     </div>
 
-    <div class="stats-grid" id="stats" role="region" aria-label="Estadísticas">
-      <div class="stat-card s-default"><div class="stat-label">Total noticias</div><div class="stat-value default" id="sv-total">—</div><div class="stat-sub" id="ss-total">&nbsp;</div></div>
-      <div class="stat-card s-green"><div class="stat-label">Alcistas</div><div class="stat-value green" id="sv-alc">—</div><div class="stat-sub" id="ss-alc">&nbsp;</div></div>
-      <div class="stat-card s-red"><div class="stat-label">Bajistas</div><div class="stat-value red" id="sv-baj">—</div><div class="stat-sub" id="ss-baj">&nbsp;</div></div>
-      <div class="stat-card s-accent"><div class="stat-label">Alta relevancia</div><div class="stat-value accent" id="sv-alta">—</div><div class="stat-sub" id="ss-alta">&nbsp;</div></div>
+    <div class="stats-bar" id="stats" role="region" aria-label="Estadísticas">
+      <div class="stat-item"><div class="stat-label">Total noticias</div><div class="stat-value default" id="sv-total">—</div><div class="stat-sub" id="ss-total">&nbsp;</div></div>
+      <div class="stat-item"><div class="stat-label">Alcistas</div><div class="stat-value green" id="sv-alc">—</div><div class="stat-sub" id="ss-alc">&nbsp;</div></div>
+      <div class="stat-item"><div class="stat-label">Bajistas</div><div class="stat-value red" id="sv-baj">—</div><div class="stat-sub" id="ss-baj">&nbsp;</div></div>
+      <div class="stat-item"><div class="stat-label">Alta relevancia</div><div class="stat-value accent" id="sv-alta">—</div><div class="stat-sub" id="ss-alta">&nbsp;</div></div>
     </div>
 
     <!-- SPY Chart -->
