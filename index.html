@@ -1057,11 +1057,28 @@ async function cargarSPY() {
   const priceEl = document.getElementById('spy-price');
 
   try {
-    const yfUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=1y&interval=1wk';
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(yfUrl)}`;
-    const res = await fetch(proxyUrl);
-    if (!res.ok) throw new Error();
-    const json = await res.json();
+    const yfUrl = 'https://query2.finance.yahoo.com/v8/finance/chart/SPY?range=1y&interval=1wk&includePrePost=false&corsDomain=finance.yahoo.com';
+    const proxies = [
+      `https://corsproxy.io/?${encodeURIComponent(yfUrl)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(yfUrl)}`,
+      `https://thingproxy.freeboard.io/fetch/${yfUrl}`,
+    ];
+    function fetchWithTimeout(url, ms) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), ms);
+      return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
+    }
+    let json = null;
+    for (const proxyUrl of proxies) {
+      try {
+        const res = await fetchWithTimeout(proxyUrl, 7000);
+        if (!res.ok) continue;
+        const text = await res.text();
+        const parsed = JSON.parse(text);
+        if (parsed?.chart?.result?.[0]) { json = parsed; break; }
+      } catch { continue; }
+    }
+    if (!json) throw new Error('no proxy');
     const result = json.chart.result[0];
     const timestamps = result.timestamp.map(t => new Date(t * 1000));
     const closes = result.indicators.quote[0].close.map(v => v ? +v.toFixed(2) : null);
