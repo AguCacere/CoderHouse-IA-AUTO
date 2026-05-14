@@ -1063,10 +1063,15 @@ async function cargarSPY() {
       `https://api.allorigins.win/raw?url=${encodeURIComponent(yfUrl)}`,
       `https://thingproxy.freeboard.io/fetch/${yfUrl}`,
     ];
+    function fetchWithTimeout(url, ms) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), ms);
+      return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
+    }
     let json = null;
     for (const proxyUrl of proxies) {
       try {
-        const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(7000) });
+        const res = await fetchWithTimeout(proxyUrl, 7000);
         if (!res.ok) continue;
         const text = await res.text();
         const parsed = JSON.parse(text);
