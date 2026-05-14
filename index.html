@@ -90,25 +90,35 @@
   .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .logo { display: flex; align-items: center; gap: 10px; }
 
-  .logo-dot {
-    width: 8px; height: 8px;
-    background: var(--green); border-radius: 50%; flex-shrink: 0;
-    animation: pulse-live 2s infinite;
-    box-shadow: 0 0 8px rgba(61,220,144,0.5);
+  .logo-icon {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(124,106,247,0.2), rgba(179,168,255,0.1));
+    border: 1px solid rgba(124,106,247,0.3); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
   }
+  .logo-icon svg { width: 14px; height: 14px; color: var(--accent2); }
 
-  @keyframes pulse-live {
-    0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 8px rgba(61,220,144,0.5); }
-    50% { opacity:0.5; transform:scale(0.8); box-shadow:0 0 3px rgba(61,220,144,0.2); }
+  .logo h1 {
+    font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text);
+    display: flex; align-items: baseline; gap: 0;
   }
-
-  .logo h1 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
+  .logo h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
 
   .logo-badge {
     font-family: 'DM Mono', monospace; font-size: 10px;
-    color: var(--green); background: rgba(61,220,144,0.1);
-    border: 1px solid rgba(61,220,144,0.25);
+    color: var(--green); background: rgba(61,220,144,0.08);
+    border: 1px solid rgba(61,220,144,0.22);
     padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .logo-badge::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--green); flex-shrink: 0;
+    animation: pulse-live 2s infinite;
   }
 
   .header-right { display: flex; align-items: center; gap: 12px; }
@@ -134,24 +144,44 @@
 
   /* ── Hero ── */
   .hero {
-    padding: 60px 0 40px;
+    padding: 52px 0 40px;
     border-bottom: 1px solid var(--border);
     position: relative; overflow: hidden;
   }
 
   .hero::before {
     content: '';
-    position: absolute; top: -100px; left: -150px;
-    width: 700px; height: 600px;
-    background: radial-gradient(ellipse at 30% 40%, rgba(124,106,247,0.14) 0%, transparent 60%);
+    position: absolute; top: -120px; left: -200px;
+    width: 800px; height: 700px;
+    background: radial-gradient(ellipse at 30% 40%, rgba(124,106,247,0.18) 0%, transparent 55%);
     pointer-events: none;
   }
 
   .hero::after {
     content: '';
     position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(124,106,247,0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(124,106,247,0.5), transparent);
   }
+
+  .hero-inner {
+    display: flex; align-items: center; justify-content: space-between; gap: 40px;
+  }
+
+  .hero-content { flex: 1; max-width: 560px; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--accent2);
+    background: rgba(124,106,247,0.08); border: 1px solid rgba(124,106,247,0.2);
+    padding: 5px 12px; border-radius: 100px; margin-bottom: 20px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+    animation: pulse-accent 2s infinite;
+  }
+  @keyframes pulse-accent { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
 
   .hero h2 {
     font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 700;
@@ -166,7 +196,38 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
 
-  .hero p { color: #aaaaaa; font-size: 15px; max-width: 500px; line-height: 1.75; }
+  .hero p { color: #999; font-size: 14.5px; line-height: 1.8; }
+
+  /* Hero decoration */
+  .hero-deco {
+    flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;
+    opacity: 0.7;
+  }
+
+  .deco-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 10px 14px;
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+    backdrop-filter: blur(8px);
+    animation: floatChip 4s ease-in-out infinite;
+  }
+  .deco-chip:nth-child(2) { animation-delay: 1.3s; }
+  .deco-chip:nth-child(3) { animation-delay: 2.6s; }
+
+  @keyframes floatChip {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .deco-chip-val {
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  }
+  .deco-chip-val.pos { color: var(--green); }
+  .deco-chip-val.neg { color: var(--red); }
+  .deco-chip-val.neu { color: var(--accent2); }
+
+  .deco-chip-label { font-size: 10px; color: #555; margin-top: 1px; }
 
   /* ── Stats bar ── */
   .stats-bar {
@@ -506,6 +567,7 @@
     .stat-item { flex: 1 1 40%; min-width: 120px; padding: 12px 0; }
     .stat-item + .stat-item::before { display: none; }
     .hero h2 { font-size: 34px; letter-spacing: -1px; }
+    .hero-deco { display: none; }
     .sort-wrap, .date-toggle { flex: 1; }
     .sort-select { width: 100%; }
   }
@@ -548,8 +610,12 @@
   <div class="container">
     <div class="header-inner">
       <div class="logo">
-        <div class="logo-dot" aria-hidden="true"></div>
-        <h1>FinanceIA Monitor</h1>
+        <div class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+          </svg>
+        </div>
+        <h1>Finance<em>IA</em> Monitor</h1>
         <span class="logo-badge">LIVE</span>
       </div>
       <div class="header-right">
@@ -567,8 +633,33 @@
   <div class="container">
 
     <div class="hero">
-      <h2>Noticias bursátiles<br><em>analizadas con IA</em></h2>
-      <p>Monitoreo automático cada 6 horas. Resúmenes, señales de inversión y análisis de impacto generados por Claude.</p>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="hero-eyebrow">Monitor bursátil · IA en tiempo real</div>
+          <h2>Noticias bursátiles<br><em>analizadas con IA</em></h2>
+          <p>Monitoreo automático cada 6 horas. Resúmenes, señales de inversión y análisis de impacto generados por Claude.</p>
+        </div>
+        <div class="hero-deco" aria-hidden="true">
+          <div class="deco-chip">
+            <div>
+              <div class="deco-chip-val pos">↑ Alcista</div>
+              <div class="deco-chip-label">Señal de mercado</div>
+            </div>
+          </div>
+          <div class="deco-chip">
+            <div>
+              <div class="deco-chip-val neu">Claude AI</div>
+              <div class="deco-chip-label">Análisis generado</div>
+            </div>
+          </div>
+          <div class="deco-chip">
+            <div>
+              <div class="deco-chip-val neg">↓ Riesgo</div>
+              <div class="deco-chip-label">Evaluación de impacto</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="stats-bar" id="stats" role="region" aria-label="Estadísticas">
